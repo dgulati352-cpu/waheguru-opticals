@@ -638,302 +638,52 @@
     </div>
   </section>
 
-  <!-- DYNAMIC RENDER LOGIC -->
+  <!-- SIMPLE VERSION - SHOW ALL PRODUCTS -->
   <script>
-    let activeProduct = null;
-    let activeProductId = null;
+      document.addEventListener('DOMContentLoaded', () => {
+          renderAllProducts();
+      });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Small timeout to guarantee PRODUCTS is parsed globally
-      setTimeout(loadProductDetail, 100);
-
-      // Listen for wishlist state shifts elsewhere (like side-cart or top nav)
-      document.addEventListener('wishlistChanged', (e) => {
-        const { productId, inWishlist } = e.detail;
-        if (productId === activeProductId) {
-          syncWishlistButton(inWishlist);
-        }
-        
-        // Update recommended cards wishlist icons if they match
-        const hearts = document.querySelectorAll(`.p-card-wishlist[data-id="${productId}"]`);
-        hearts.forEach(heart => {
-          if (inWishlist) {
-            heart.classList.add('active');
-            heart.innerText = '❤️';
-          } else {
-            heart.classList.remove('active');
-            heart.innerText = '♡';
+      function renderAllProducts() {
+          if (typeof PRODUCTS === 'undefined') {
+              console.error("PRODUCTS data not found!");
+              return;
           }
-        });
-      });
-    });
 
-    // 1. Fetch parameters, lookup DB, render values
-    function loadProductDetail() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id');
-      
-      if (!id || typeof PRODUCTS === 'undefined' || !PRODUCTS[id]) {
-        showNotFound();
-        return;
+          const grid = document.getElementById('catalogGrid');
+          if (!grid) return;
+
+          let html = '';
+
+          // Loop through all products
+          Object.values(PRODUCTS).forEach(product => {
+              html += `
+                  <div class="p-card">
+                      <div class="p-card-wishlist" data-id="${product.id}" onclick="event.stopPropagation(); toggleWishlist('${product.id}')">
+                          ♡
+                      </div>
+                      
+                      <div class="p-card-img-wrap" onclick="location.href='product.html?id=${product.id}'" style="cursor: pointer;">
+                          <img src="${product.image}" alt="${product.name}">
+                      </div>
+                      
+                      <div class="p-card-info">
+                          <div class="p-card-cat">${product.category}</div>
+                          <h3 class="p-card-title">
+                              <a href="product.html?id=${product.id}">${product.name}</a>
+                          </h3>
+                          <div class="p-card-price">₹${product.price.toLocaleString()}</div>
+                      </div>
+                      
+                      <button class="p-card-btn" onclick="window.addToCart('${product.id}')">
+                          ADD TO BAG
+                      </button>
+                  </div>
+              `;
+          });
+
+          grid.innerHTML = html;
       }
-      
-      activeProductId = id;
-      activeProduct = PRODUCTS[id];
-
-      // Update breadcrumbs
-      document.getElementById('breadcrumbCategory').innerText = activeProduct.category;
-      document.getElementById('breadcrumbCategory').href = `shop.html?category=${activeProduct.category}`;
-      document.getElementById('breadcrumbName').innerText = activeProduct.name;
-      document.title = `${activeProduct.name} | Waheguru Aura Optix`;
-
-      // Update Image
-      document.getElementById('detailMainImg').src = activeProduct.image;
-      document.getElementById('detailMainImg').alt = activeProduct.name;
-
-      // Update Thumbnails (Alternate perspective placeholders using pre-existing image assets)
-      renderThumbnails();
-
-      // Update Meta
-      document.getElementById('detailCategory').innerText = activeProduct.category;
-      document.getElementById('detailName').innerText = activeProduct.name;
-      document.getElementById('detailPrice').innerText = `₹${activeProduct.price.toLocaleString()}`;
-      document.getElementById('detailDesc').innerText = activeProduct.desc || 'Crafted with premium durable acetate material, hand-aligned double metal bridge temples, and high-clarity prescription ready lenses.';
-
-      // Ratings mock details to feel premium and unique per product
-      const reviewCount = Math.floor(Math.random() * 45) + 12;
-      const reviewScore = (4.5 + Math.random() * 0.5).toFixed(1);
-      document.getElementById('detailRatingText').innerText = `${reviewScore} / 5.0 (${reviewCount} verified reviews)`;
-
-      // Render category specific specs selection options
-      renderSpecsOptions();
-
-      // Render Features Checklist
-      renderChecklist();
-
-      // Sync Wishlist Button State
-      if (window.isInWishlist) {
-        syncWishlistButton(window.isInWishlist(activeProductId));
-      }
-
-      // Render Related Recommendations
-      renderRelatedRecommendations();
-    }
-
-    // Thumbnails rendering
-    function renderThumbnails() {
-      const bar = document.getElementById('thumbnailBar');
-      if (!bar) return;
-
-      // Make 3 thumbnails: 1 is main image, 2 and 3 can be pre-existing image assets in category
-      let alternateImages = [activeProduct.image];
-      
-      if (activeProduct.category === 'eyeglasses') {
-        alternateImages.push('assets/eyeglasses_img.png', 'assets/eyeglasses_img2.png');
-      } else if (activeProduct.category === 'sunglasses') {
-        alternateImages.push('assets/sg1.png', 'assets/sg2.png');
-      } else {
-        alternateImages.push('assets/cont2.png', 'assets/cont3.png');
-      }
-
-      let html = '';
-      alternateImages.forEach((img, idx) => {
-        const activeClass = idx === 0 ? 'active' : '';
-        html += `
-          <button class="thumbnail-btn ${activeClass}" onclick="switchMainImage('${img}', this)">
-            <img src="${img}" alt="Angle ${idx + 1}">
-          </button>
-        `;
-      });
-      bar.innerHTML = html;
-    }
-
-    window.switchMainImage = function(src, btn) {
-      document.getElementById('detailMainImg').src = src;
-      
-      // Update active thumbnail borders
-      document.querySelectorAll('.thumbnail-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    };
-
-    // Category options builder
-    function renderSpecsOptions() {
-      const box = document.getElementById('optionsBox');
-      if (!box) return;
-
-      let html = '';
-
-      if (activeProduct.category === 'eyeglasses' || activeProduct.category === 'sunglasses') {
-        html = `
-          <div>
-            <div class="config-title">1. Select Frame Fitting Size</div>
-            <div class="config-options-row">
-              <span class="config-pill active" onclick="selectConfigOption(this)">Standard Fit</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">Narrow Fit</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">Wide Fit</span>
-            </div>
-          </div>
-          <div style="margin-top: 10px;">
-            <div class="config-title">2. Select Lens Upgrade</div>
-            <div class="config-options-row">
-              <span class="config-pill active" onclick="selectConfigOption(this)">Zero Power Clear Lenses</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">Blue Cut Screen Protection (+₹999)</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">Smart Photochromic Adaptable (+₹1,499)</span>
-            </div>
-          </div>
-        `;
-      } else {
-        // Contact Lenses specs power selection
-        html = `
-          <div>
-            <div class="config-title">1. Corrective Sphere Power (S.P.H)</div>
-            <div class="config-options-row" style="max-height: 120px; overflow-y: auto; padding: 5px;">
-              <span class="config-pill active" onclick="selectConfigOption(this)">Zero Power (0.00)</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">-1.00</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">-2.00</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">-3.00</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">-4.00</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">-5.00</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">-6.00</span>
-            </div>
-          </div>
-          <div style="margin-top: 10px;">
-            <div class="config-title">2. Supply Packaging Quantity</div>
-            <div class="config-options-row">
-              <span class="config-pill active" onclick="selectConfigOption(this)">1 Box (30 Lenses)</span>
-              <span class="config-pill" onclick="selectConfigOption(this)">2 Boxes (60 Lenses - Save 5%)</span>
-            </div>
-          </div>
-        `;
-      }
-      box.innerHTML = html;
-    }
-
-    window.selectConfigOption = function(pill) {
-      // Toggle active inside sibling tags
-      const row = pill.parentNode;
-      row.querySelectorAll('.config-pill').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-    };
-
-    // Checklist
-    function renderChecklist() {
-      const listContainer = document.getElementById('detailFeaturesList');
-      if (!listContainer) return;
-
-      const features = activeProduct.features || [
-        "Lightweight premium construction frame",
-        "Hand-polished scratch-resistant coatings",
-        "Hypoallergenic comfort adjustable nose pads",
-        "Anti-reflective coatings included free"
-      ];
-
-      listContainer.innerHTML = features.map(feat => `<li>${feat}</li>`).join('');
-    }
-
-    // Wishlist syncing
-    function syncWishlistButton(inWishlist) {
-      const btn = document.getElementById('detailWishBtn');
-      if (!btn) return;
-
-      if (inWishlist) {
-        btn.classList.add('active');
-        btn.innerHTML = '❤️';
-      } else {
-        btn.classList.remove('active');
-        btn.innerHTML = '♡';
-      }
-    }
-
-    // Adjust quantities
-    window.adjustQty = function(delta) {
-      const qtyEl = document.getElementById('detailQty');
-      let val = parseInt(qtyEl.value, 10);
-      val = Math.max(1, val + delta);
-      qtyEl.value = val;
-    };
-
-    // Add To Bag Trigger
-    window.handleAddToBag = function() {
-      if (!activeProductId) return;
-      const qty = parseInt(document.getElementById('detailQty').value, 10) || 1;
-      
-      if (window.addToCart) {
-        window.addToCart(activeProductId, qty);
-      }
-    };
-
-    // Wishlist Toggle
-    window.handleWishlistToggle = function() {
-      if (!activeProductId) return;
-      if (window.toggleWishlist) {
-        window.toggleWishlist(activeProductId);
-      }
-    };
-
-    // Related Products calculation
-    function renderRelatedRecommendations() {
-      const grid = document.getElementById('recommendationsGrid');
-      if (!grid || typeof PRODUCTS === 'undefined') return;
-
-      // Filter other products in the same category
-      let list = Object.values(PRODUCTS).filter(item => 
-        item.category === activeProduct.category && item.id !== activeProductId
-      );
-
-      // Randomize selection slightly and take first 4 items
-      list.sort(() => 0.5 - Math.random());
-      const selected = list.slice(0, 4);
-
-      if (selected.length === 0) {
-        document.getElementById('recommendationsSection').style.display = 'none';
-        return;
-      }
-
-      let html = '';
-      selected.forEach(prod => {
-        const isHot = prod.price > 3500;
-        const badgeHtml = isHot ? '<span class="p-card-badge">Top Pick</span>' : '';
-        const inWishlistClass = window.isInWishlist && window.isInWishlist(prod.id) ? 'active' : '';
-        const heartChar = inWishlistClass ? '❤️' : '♡';
-
-        html += `
-          <div class="p-card">
-            ${badgeHtml}
-            <div class="p-card-wishlist ${inWishlistClass}" data-id="${prod.id}" onclick="event.stopPropagation(); handleWishlistClick('${prod.id}', this)">
-              ${heartChar}
-            </div>
-            
-            <div class="p-card-img-wrap" onclick="location.href='product.html?id=${prod.id}'" style="cursor:pointer;">
-              <img src="${prod.image}" alt="${prod.name}">
-            </div>
-            
-            <div>
-              <div class="p-card-cat">${prod.category}</div>
-              <h3 class="p-card-title"><a href="product.html?id=${prod.id}">${prod.name}</a></h3>
-            </div>
-            
-            <div class="p-card-price-row">
-              <div class="p-card-price">₹${prod.price.toLocaleString()}</div>
-              <button class="p-card-btn" onclick="window.addToCart('${prod.id}')">ADD TO BAG</button>
-            </div>
-          </div>
-        `;
-      });
-      grid.innerHTML = html;
-    }
-
-    function handleWishlistClick(id, element) {
-      if (window.toggleWishlist) {
-        window.toggleWishlist(id);
-      }
-    }
-
-    function showNotFound() {
-      document.getElementById('productDetailSection').style.display = 'none';
-      document.getElementById('recommendationsSection').style.display = 'none';
-      document.getElementById('notFoundCard').style.display = 'block';
-    }
   </script>
 </body>
 </html>
