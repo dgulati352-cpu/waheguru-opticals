@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    if (!localStorage.getItem('opticaura_logged_in')) {
+      window.location.href = '../login.html';
+    }
+  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EyeWear Store</title>
+<link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-container">
+    <a href="#">About us</a>
+    <a href="#">Contact Us</a>
+    <a href="#">Eye Care</a>
+    <a href="#">New Arrivals</a>
+    <a href="#">Best Sellers</a>
+    <a href="#">Offline Stores</a>
+    <a href="#">Book Appointment</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Help</a>
+    <a href="#" onclick="localStorage.removeItem('opticaura_logged_in'); window.location.reload();" style="color: #ff6b6b !important; font-weight: 600;">Logout</a>
+  </div>
+</div>
+
+<header class="main-header">
+  <div class="main-header-container">
+    <a href="#" class="logo">
+      <img src="logo.png" alt="Logo">
+      WAHEGURU AURA OPTIX
+    </a>
+
+    <nav class="main-nav">
+
+      <div class="dropdown">
+        <a href="#">EYEGLASSES</a>
+        <ul class="dropdown-menu">
+          <li><a href="#Eyeglasses">Men's Eyeglasses</a></li>
+          <li><a href="#Eyeglasses">Women's Eyeglasses</a></li>
+          <li><a href="#Eyeglasses">Computer Glasses</a></li>
+          <li><a href="#Eyeglasses">Kids' Eyeglasses</a></li>
+        </ul>
+      </div>
+
+      <div class="dropdown">
+        <a href="#">SUNGLASSES</a>
+        <ul class="dropdown-menu">
+          <li><a href="#Sunglasses">Men's Sunglasses</a></li>
+          <li><a href="#Sunglasses">Women's Sunglasses</a></li>
+          <li><a href="#Sunglasses">Power Sunglasses</a></li>
+          <li><a href="#Sunglasses">Sports Sunglasses</a></li>
+        </ul>
+      </div>
+
+      <div class="dropdown">
+        <a href="#">CONTACTS</a>
+        <ul class="dropdown-menu">
+          <li><a href="#Contacts">Daily Disposable</a></li>
+          <li><a href="#Contacts">Monthly Disposable</a></li>
+          <li><a href="#Contacts">Colored Contact Lenses</a></li>
+          <li><a href="#Contacts">Contact Lens Solution & Care</a></li>
+        </ul>
+      </div>
+
+      <div class="dropdown">
+        <a href="#">SPECIAL POWER</a>
+        <ul class="dropdown-menu">
+          <li><a href="#SpecialPower">High Power Lenses</a></li>
+          <li><a href="#SpecialPower">Cylinder Power Lenses</a></li>
+          <li><a href="#SpecialPower">Photochromic Lenses</a></li>
+          <li><a href="#SpecialPower">Blue Cut + UV Protection</a></li>
+        </ul>
+      </div>
+
+    </nav>
+
+    <div class="header-icons">
+      <a href="#" class="cart-icon">🛒</a>
+    </div>
+  </div>
+</header>
+
+<div class="cover-section">
+  <div class="cover-image">
+    <div class="cover-text">
+      <h1>See The World Clearly</h1>
+      <p>Premium eyeglasses, sunglasses and contact lenses</p>
+      <a href="#Eyeglasses" class="cover-btn">Shop Now</a>
+    </div>
+  </div>
+</div>
+
+<section class="top-categories-section">
+  <h2>Top Categories</h2>
+
+  <div class="top-categories-container">
+
+    <div class="top-category-item">
+      <img src="1.jpeg" alt="Computer Glasses">
+      <p>Computer Glasses</p>
+    </div>
+
+    <div class="top-category-item">
+      <img src="2.jpeg" alt="Classic Black Frame">
+      <p>Classic Black Frame</p>
+    </div>
+
+    <div class="top-category-item">
+      <img src="3.jpeg" alt="Modern Sunglasses">
+      <p>Modern Sunglasses</p>
+    </div>
+
+    <div class="top-category-item">
+      <img src="4.jpeg" alt="Modern Sunglasses">
+      <p>Modern Sunglasses</p>
+    </div>
+
+    <div class="top-category-item">
+      <img src="5.jpeg" alt="Premium Eyeglasses">
+      <p>Premium Eyeglasses</p>
+    </div>
+
+    <div class="top-category-item">
+      <img src="6.jpeg" alt="Stylish Round Frame">
+      <p>Stylish Round Frame</p>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+<section class="sectionbox exclusives-section">
+  <h2>Our Exclusives</h2>
+
+  <div class="category">
+
+    <div class="item video-item">
+      <video autoplay muted loop playsinline>
+        <source src="mp1.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="item video-item">
+      <video autoplay muted loop playsinline>
+        <source src="mp2.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="item video-item">
+      <video autoplay muted loop playsinline>
+        <source src="mp3.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="item video-item">
+      <video autoplay muted loop playsinline>
+        <source src="mp4.mp4" type="video/mp4">
+      </video>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
+<section id="" class="sectionbox">
+  <h2>Who Bought From Us ?</h2>
+  <div class="category">
+    <div class="item">
+      <img src="m1.jpeg" alt="Men's Sunglasses">
+      <h3>Rohit Saraf</h3>
+      <p>Model</p>
+      <hr>
+      <p>Indian Actor done acting in Movies like sky is pink and ludo, Webseries names mismatched</p>
+    </div>
+
+    <div class="item">
+      <img src="m2.jpg" alt="Zayn Malik">
+      <h3>Zayn Malik</h3>
+      <p>Pillowtalk</p>
+      <hr>
+      <p>Ex-One Direction member Successful solo artist Known for R&B/pop style</p>
+    </div>
+    <div class="item">
+      <img src="m3.png" alt="Chris Hemsworth">
+      <h3>Chris Hemsworth</h3>
+      <p>Actor</p>
+      <hr>
+      <p>One of lead Australian Actor in marvel movies , Plays the role of Thor.</p>
+    </div>
+    <div class="item">
+      <img src="m4.jpeg" alt="Chris Hemsworth">
+      <h3>Virat Kohli</h3>
+      <p>Cricketer</p>
+      <hr>
+      <p>One the best cricketer in Indian cricket team also Actor , Model and also have spiritual belief   </p>
+      
+    </div>
+  </div>
+</section>
+
+
+
+<section id="Eyeglasses" class="sectionbox">
+  <h2>Eyeglasses</h2>
+  <div class="category">
+    <div class="item">
+      <img src="7.jpeg" alt="Men's Eyeglasses">
+      <h3>Men's Eyeglasses</h3>
+      <p>Stylish premium men's eyeglasses for aesthic vibe.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+    
+    <div class="item">
+      <img src="8.jpeg" alt="Women's Eyeglasses">
+      <h3>Women's Eyeglasses</h3>
+      <p>Elegant and modern women's eyeglasses.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="9.jpeg" alt="Computer Glasses">
+      <h3>Computer Glasses</h3>
+      <p>Protect your eyes while working on screens.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="10.jpeg" alt="Kids' Eyeglasses">
+      <h3>Kids' Eyeglasses</h3>
+      <p>Durable and safe eyeglasses for kids.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+  </div>
+</section>
+
+
+<section id="Sunglasses" class="sectionbox">
+  <h2>Sunglasses</h2>
+  <div class="category">
+    <div class="item">
+      <img src="11.jpeg" alt="Men's Sunglasses">
+      <h3>Men's Sunglasses</h3>
+      <p>Stylish and modern sunglasses for men.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="12.jpeg" alt="Women's Sunglasses">
+      <h3>Women's Sunglasses</h3>
+      <p>Elegant sunglasses for women with premium look.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="13.jpeg" alt="Power Sunglasses">
+      <h3>Power Sunglasses</h3>
+      <p>Sunglasses with lens power for clear vision.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="14.jpeg" alt="Sports Sunglasses">
+      <h3>Sports Sunglasses</h3>
+      <p>Perfect for outdoor sports and activities.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+  </div>
+</section>
+
+
+<section id="Contacts" class="sectionbox">
+  <h2>Contact Lenses</h2>
+  <div class="category">
+    <div class="item">
+      <img src="15.jpeg" alt="Daily Disposable">
+      <h3>Daily Disposable</h3>
+      <p>Convenient daily disposable contact lenses.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="16.jpeg" alt="Monthly Disposable">
+      <h3>Monthly Disposable</h3>
+      <p>Long-lasting monthly lenses for everyday use.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="17.jpeg" alt="Colored Contact Lenses">
+      <h3>Colored Contact Lenses</h3>
+      <p>Add style with colored contact lenses.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="18.jpeg" alt="Contact Lens Solution">
+      <h3>Lens Solution & Care</h3>
+      <p>Keep your lenses clean and safe to use.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+  </div>
+</section>
+
+
+<section id="SpecialPower" class="sectionbox">
+  <h2>Special Power Lenses</h2>
+  <div class="category">
+    <div class="item">
+      <img src="19.jpeg" alt="High Power Lenses">
+      <h3>High Power Lenses </h3>
+      <p>Power lenses for strong prescriptions.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="20.jpeg" alt="Cylinder Lenses">
+      <h3>Cylinder Power Lenses</h3>
+      <p>Corrects astigmatism effectively,so you got relaxed.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="21.jpeg" alt="Photochromic Lenses">
+      <h3>Photochromic Lenses</h3>
+      <p>Lenses that darken in sunlight automatically.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+
+    <div class="item">
+      <img src="22.jpeg" alt="Blue Cut Lenses">
+      <h3>Blue Cut + UV Protection</h3>
+      <p>Protects your eyes from blue light and UV rays.</p>
+      <hr>
+      <p>CLICK</p>
+      <a href="#" class="btn">VIEW</a>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+<div class="footer-container">
+
+<div class="footer-col footer-logo">
+<h2>WAHEGURU AURA OPTIX</h2>
+<p>Your trusted eyewear partner. Shop premium eyeglasses, sunglasses, contact lenses and more with home try-on.</p>
+</div>
+
+<div class="footer-col">
+<h3>Quick Links</h3>
+<ul>
+<li><a href="#Eyeglasses">Eyeglasses</a></li>
+<li><a href="#Sunglasses">Sunglasses</a></li>
+<li><a href="#Contacts">Contact Lenses</a></li>
+<li><a href="#SpecialPower">Power Sunglasses</a></li>
+<li><a href="#">Computer Glasses</a></li>
+</ul>
+</div>
+
+<div class="footer-col">
+<h3>Help and Support</h3>
+<ul>
+<li><a href="#">Track Order</a></li>
+<li><a href="#">FAQs</a></li>
+<li><a href="#">Return and Refund</a></li>
+<li><a href="#">Cancellation Policy</a></li>
+<li><a href="#">Contact Us</a></li>
+</ul>
+</div>
+
+<div class="footer-col">
+<div style="margin-top:25px;">
+<h4 style="margin-bottom:10px;color:white;">We Accept</h4>
+<div class="payment-methods">
+<img src="visa.png" alt="Visa">
+<img src="mastercard.png" alt="Mastercard">
+<img src="rupay.png" alt="Rupay">
+<img src="paytm.png" alt="Paytm">
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="bottom-bar">
+2026 EyeWear Store. All Rights Reserved.
+<br style="margin:8px 0;">
+<a href="#" style="color:#bbb;margin:0 10px;">Privacy Policy</a>
+<a href="#" style="color:#bbb;margin:0 10px;">Terms of Use</a>
+<a href="#" style="color:#bbb;margin:0 10px;">Sitemap</a>
+</div>
+
+</footer>
+
+</body>
+</html>
