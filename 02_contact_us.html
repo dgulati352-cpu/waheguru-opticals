@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    if (!localStorage.getItem('opticaura_logged_in')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Waheguru Aura Optix</title>
+    <link rel="stylesheet" href="02_style.css">
+    
+</head>
+
+<body>
+
+    
+            <!-- ===================== TOP BAR ===================== -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <a href="01_about_us.html">About us</a>
+            <a href="02_contact_us.html">Contact Us</a>
+            <a href="03_eye_care.html">Eye Care</a>
+            <a href="04_new_arrival.html">New Arrivals</a>
+            <a href="05_best_seller.html">Best Sellers</a>
+            <a href="06_offline_store.html">Offline Stores</a>
+            <a href="07_book_app.html">Book Appointment</a>
+            <a href="08_privacy_policy.html">Privacy Policy</a>
+            <a href="09_help.html">Help</a>
+            <a href="#" onclick="localStorage.removeItem('opticaura_logged_in'); window.location.reload();" style="color: #ff6b6b !important; font-weight: 600;">Logout</a>
+        </div>
+    </div>
+
+
+    <!-- ===================== NAVBAR ===================== -->
+    <header class="main-header">
+        <div class="main-header-container">
+            <a href="index.html" class="logo">
+                <img src="img0.jpeg" alt="Logo">
+                WAHEGURU AURA OPTIX
+            </a>
+            <nav class="main-nav">
+                <div class="dropdown">
+                    <a href="shop.html?category=eyeglasses">EYEGLASSES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=eyeglasses&sub=men">Men's Eyeglasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=women">Women's Eyeglasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=computer">Computer Glasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=kids">Kids' Eyeglasses</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="shop.html?category=sunglasses">SUNGLASSES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=sunglasses&sub=men">Men's Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=women">Women's Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=icon">Power Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=sports">Sports Sunglasses</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="shop.html?category=contacts">CONTACTS</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=contacts&sub=daily">Daily Disposable</a></li>
+                        <li><a href="shop.html?category=contacts&sub=monthly">Monthly Disposable</a></li>
+                        <li><a href="shop.html?category=contacts&sub=colored">Colored Contact Lenses</a></li>
+                        <li><a href="shop.html?category=contacts&sub=lens">Contact Lens Solution & Care</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="special-power.html">SPECIAL POWER</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="special-power.html">High Power Lenses</a></li>
+                        <li><a href="special-power.html">Cylinder Power Lenses</a></li>
+                        <li><a href="special-power.html">Photochromic Lenses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=computer">Blue Cut + UV Protection</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="06_offline_store.html">STORES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="06_offline_store.html">Find a Store Near You</a></li>
+                        <li><a href="06_offline_store.html">Official Stores</a></li>
+                        <li><a href="07_book_app.html">Book Eye Test Appointment</a></li>
+                        <li><a href="07_book_app.html">Home Eye Check-up</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="header-icons">
+                <a href="shop.html" class="cart-icon">🛒</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="contact-header">
+        <h1>Get In Touch</h1>
+        <p>Whether it’s a style query or an eye checkup, we are here to help.</p>
+    </div>
+
+    <div class="container" style="max-width: 1100px; margin: auto; padding: 0 20px;">
+        <div class="main-container">
+
+            <div class="info-side">
+                <h2>Contact Information</h2>
+                <div class="info-item">
+                    <h4>Our Location</h4>
+                    <p>123 Heritage Lane, Optical Plaza<br>New Delhi, India</p>
+                </div>
+                <div class="info-item">
+                    <h4>Call Us</h4>
+                    <p>+91 98765 43210</p>
+                </div>
+                <div class="info-item">
+                    <h4>Email Us</h4>
+                    <p>support@waheguruauraoptix.com</p>
+                </div>
+                <div class="info-item">
+                    <h4>Store Hours</h4>
+                    <p>Mon - Sat: 10 AM to 8 PM<br>Sunday: Closed</p>
+                </div>
+            </div>
+
+            <div class="form-side">
+                <h2>Send Us a Message</h2>
+                <form action="#">
+                    <div class="input-group">
+                        <label>Your Full Name</label>
+                        <input type="text" placeholder="Enter your name" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" placeholder="email@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>How can we help?</label>
+                        <textarea rows="4" placeholder="Ask us about frames, lenses, or appointments..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="map-area">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.5657335602!2d77.22732107550012!3d28.6128456756749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce2dab96eb813%3A0x4a0d9934211f301d!2sIndia%20Gate!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
+                allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <div style="text-align: center; padding: 40px; opacity: 0.6; font-size: 0.9rem;">
+            &copy; 2026 WAHEGURU AURA OPTIX.
+        </div>
+    </div>
+    <script>
+        
+    
+    const header = document.querySelector('.main-header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.style.boxShadow = "0 2px 15px rgba(0,0,0,0.1)";
+            header.style.transition = "0.3s ease";
+        } else {
+            header.style.boxShadow = "none";
+        }
+    });
+
+    
+    const contactForm = document.querySelector('form');
+    
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault(); 
+
+        
+        const name = this.querySelector('input[type="text"]').value;
+        const email = this.querySelector('input[type="email"]').value;
+
+        if(name && email) {
+            
+            const btn = this.querySelector('.submit-btn');
+            btn.innerHTML = "Sending...";
+            btn.style.opacity = "0.7";
+            btn.disabled = true;
+
+            
+            setTimeout(() => {
+              
+                const formSide = document.querySelector('.form-side');
+                formSide.innerHTML = `
+                    <div style="text-align: center; padding: 40px 0; animation: fadeIn 0.5s ease;">
+                        <h2 style="color: #7c5630;">Thank You, ${name.split(' ')[0]}!</h2>
+                        <p>Your message has been received. Our optical experts will get back to you at <strong>${email}</strong> within 24 hours.</p>
+                        <button onclick="location.reload()" class="submit-btn" style="width: auto; padding: 10px 25px; margin-top: 20px;">Send Another Message</button>
+                    </div>
+                `;
+            }, 2000);
+        }
+    });
+
+   
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dd => {
+        dd.addEventListener('click', function(e) {
+            if (window.innerWidth < 768) {
+                const menu = this.querySelector('.dropdown-menu');
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            }
+        });
+    });
+
+    </script>
+
+</body>
+
+</html>

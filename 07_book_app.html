@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    if (!localStorage.getItem('opticaura_logged_in')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Consultation | Waheguru Aura Optix</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="07_style.css">
+
+</head>
+
+<body>
+
+    
+            <!-- ===================== TOP BAR ===================== -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <a href="01_about_us.html">About us</a>
+            <a href="02_contact_us.html">Contact Us</a>
+            <a href="03_eye_care.html">Eye Care</a>
+            <a href="04_new_arrival.html">New Arrivals</a>
+            <a href="05_best_seller.html">Best Sellers</a>
+            <a href="06_offline_store.html">Offline Stores</a>
+            <a href="07_book_app.html">Book Appointment</a>
+            <a href="08_privacy_policy.html">Privacy Policy</a>
+            <a href="09_help.html">Help</a>
+            <a href="#" onclick="localStorage.removeItem('opticaura_logged_in'); window.location.reload();" style="color: #ff6b6b !important; font-weight: 600;">Logout</a>
+        </div>
+    </div>
+
+
+    <!-- ===================== NAVBAR ===================== -->
+    <header class="main-header">
+        <div class="main-header-container">
+            <a href="index.html" class="logo">
+                <img src="img0.jpeg" alt="Logo">
+                WAHEGURU AURA OPTIX
+            </a>
+            <nav class="main-nav">
+                <div class="dropdown">
+                    <a href="shop.html?category=eyeglasses">EYEGLASSES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=eyeglasses&sub=men">Men's Eyeglasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=women">Women's Eyeglasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=computer">Computer Glasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=kids">Kids' Eyeglasses</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="shop.html?category=sunglasses">SUNGLASSES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=sunglasses&sub=men">Men's Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=women">Women's Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=icon">Power Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=sports">Sports Sunglasses</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="shop.html?category=contacts">CONTACTS</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=contacts&sub=daily">Daily Disposable</a></li>
+                        <li><a href="shop.html?category=contacts&sub=monthly">Monthly Disposable</a></li>
+                        <li><a href="shop.html?category=contacts&sub=colored">Colored Contact Lenses</a></li>
+                        <li><a href="shop.html?category=contacts&sub=lens">Contact Lens Solution & Care</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="special-power.html">SPECIAL POWER</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="special-power.html">High Power Lenses</a></li>
+                        <li><a href="special-power.html">Cylinder Power Lenses</a></li>
+                        <li><a href="special-power.html">Photochromic Lenses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=computer">Blue Cut + UV Protection</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="06_offline_store.html">STORES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="06_offline_store.html">Find a Store Near You</a></li>
+                        <li><a href="06_offline_store.html">Official Stores</a></li>
+                        <li><a href="07_book_app.html">Book Eye Test Appointment</a></li>
+                        <li><a href="07_book_app.html">Home Eye Check-up</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="header-icons">
+                <a href="shop.html" class="cart-icon">🛒</a>
+            </div>
+        </div>
+    </header>
+
+<header class="hero">
+    <div class="hero-text">
+        <h1>Private Consultation</h1>
+        <p>Book Eye Care & Frame Selection</p>
+    </div>
+</header>
+
+<section class="section">
+    <h2>Schedule Your Visit</h2>
+    <div class="form-container">
+        <form action="#">
+            <div class="form-group">
+                <input type="text" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" placeholder="Mobile Number" required>
+            </div>
+            <div class="form-group">
+                <select required>
+                    <option value="" disabled selected>Nature of Consultation</option>
+                    <option>Comprehensive Eye Test</option>
+                    <option>Personal Styling Session</option>
+                    <option>Lens Technology Review</option>
+                    <option>Maintenance & Adjustments</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <input type="date" required>
+                <input type="time" required>
+            </div>
+            <textarea rows="3" placeholder="Special requirements or vision concerns..." style="margin-top: 20px;"></textarea>
+            
+            <button class="btn" type="submit">Request Appointment</button>
+        </form>
+    </div>
+</section>
+<script>
+   
+    const heroH1 = document.querySelector('.hero h1');
+    const hours = new Date().getHours();
+    let greeting = "Private Consultation";
+    
+    if (hours < 12) greeting = "Morning Consultation";
+    else if (hours < 17) greeting = "Afternoon Consultation";
+    else greeting = "Evening Consultation";
+    
+    heroH1.innerText = greeting;
+
+   
+    const form = document.querySelector('form');
+    const btn = document.querySelector('.btn');
+    
+    form.addEventListener('input', () => {
+        if (form.checkValidity()) {
+            btn.style.background = "#8c7a5b"; // Turns to brand gold when ready
+            btn.innerText = "Confirm Request";
+        }
+    });
+
+   
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const container = document.querySelector('.form-container');
+        container.style.transition = "all 0.8s ease";
+        container.style.opacity = "0";
+        
+        setTimeout(() => {
+            container.innerHTML = `
+                <div style="padding: 40px; color: #2c241e;">
+                    <h3 style="font-family: 'Playfair Display'; font-size: 2rem;">Reserved.</h3>
+                    <p style="margin-top: 20px; letter-spacing: 1px;">A styling concierge will contact you within 2 hours to confirm your visit to Waheguru Aura Optix.</p>
+                    <div style="margin-top: 30px; font-size: 2rem;">⌛</div>
+                </div>
+            `;
+            container.style.opacity = "1";
+        }, 800);
+    });
+</script>
+
+
+
+<footer>
+    <div class="footer-content">
+        <p>WAHEGURU AURA OPTIX SINCE 1998</p>
+        <div class="footer-sep"></div>
+        <p>📍 2026 WAHEGURU AURA OPTIX | 📞 +91 9876543210</p>
+        <p style="opacity: 0.9; font-size: 0.7rem; margin-top: 30px;">© 2026 WAHEGURU AURA OPTIX. ALL RIGHTS RESERVED.</p>
+    </div>
+</footer>
+
+</body>
+</html>>

@@ -1,0 +1,611 @@
+================================================================================
+                    OPTICAURA JAVASCRIPT CODE EXPLANATION GUIDE
+================================================================================
+
+This document provides a comprehensive, function-by-function guide to the JavaScript code powering the OpticAura web application. It breaks down what the code is doing, how each function works under the hood, and how state (shopping bag, wishlist, navigation, filters) is managed dynamically.
+
+--------------------------------------------------------------------------------
+TABLE OF CONTENTS:
+1. js/shared.js (Core Application State, Shared Layout, and Toast Alerts)
+2. product.html (Dynamic Product Info, Configurator Options, and Recommendations)
+3. shop.html (Multi-Category Filtering, Real-Time Sorting, Search, and URL Syncing)
+4. special-power.html (Interactive Optical Lens Glare visualizer Simulator)
+--------------------------------------------------------------------------------
+
+
+================================================================================
+SECTION 1: js/shared.js
+================================================================================
+This script is shared by all pages. It initializes global application states
+stored in localStorage, injects the header, footer, and slide-out cart HTML,
+manages adding/removing items from the cart and wishlist, renders the sidebar cart
+contents dynamically, handles navigation, and triggers notifications.
+
+--------------------------------------------------------------------------------
+A. APPLICATION LIFECYCLE (DOMContentLoaded)
+--------------------------------------------------------------------------------
+1. Event Listener: 'DOMContentLoaded'
+   - Type: Event Listener
+   - Triggers: Automatically when the HTML document is fully parsed and loaded, 
+     without waiting for stylesheets, images, and subframes to finish loading.
+   - Flow:
+     a. Runs initCart() to make sure a cart exists in localStorage.
+     b. Runs initWishlist() to make sure a wishlist exists in localStorage.
+     c. Runs injectHeader() to inject the responsive layout navigation header.
+     d. Runs injectFooter() to inject the global site footer.
+     e. Runs injectCartPanel() to inject the slide-out shopping bag and toast notifications.
+     f. Runs setupNavigationEvents() to bind events (mobile toggle, scroll sticky, search input).
+     g. Runs updateHeaderBadges() to synchronize the cart and wishlist counts in the header.
+     h. Runs renderCartItems() to display the current cart items in the sidebar.
+     i. Runs highlightActiveNav() to apply active styles to the current page link.
+
+--------------------------------------------------------------------------------
+B. STATE HELPERS (localStorage Management)
+--------------------------------------------------------------------------------
+2. initCart()
+   - Type: Initialization Helper
+   - Purpose: Initializes the cart key in localStorage if it does not exist yet.
+   - Details: Checks if 'opticaura_cart' exists in localStorage. If not, it sets it to
+     a stringified empty array: JSON.stringify([]).
+
+3. initWishlist()
+   - Type: Initialization Helper
+   - Purpose: Initializes the wishlist key in localStorage if it does not exist yet.
+   - Details: Checks if 'opticaura_wishlist' exists. If not, sets it to JSON.stringify([]).
+
+4. getCart()
+   - Type: State Getter
+   - Purpose: Retrieves the parsed shopping cart array.
+   - Returns: Array (List of cart items containing: id, name, price, image, category, qty)
+   - Details: Reads 'opticaura_cart' from localStorage. If found, parses the string back
+     into a JavaScript array; otherwise, defaults to returning an empty array [].
+
+5. setCart(cart)
+   - Type: State Setter
+   - Purpose: Saves the cart state and updates all linked UI elements instantly.
+   - Arguments: cart (Array)
+   - Details: Serializes the cart array using JSON.stringify() and writes it to
+     localStorage. It then calls:
+     a. updateHeaderBadges() to update the badge count in the nav bar.
+     b. renderCartItems() to rebuild the sidebar card elements.
+
+6. getWishlist()
+   - Type: State Getter
+   - Purpose: Retrieves the parsed list of wishlisted product IDs.
+   - Returns: Array (List of strings representing product IDs, e.g. ["product1", "sg2"])
+   - Details: Reads and parses 'opticaura_wishlist' from localStorage. Defaults to [].
+
+7. setWishlist(wishlist)
+   - Type: State Setter
+   - Purpose: Saves the wishlist state and updates header counter badges.
+   - Arguments: wishlist (Array)
+   - Details: Serializes the wishlist array and writes it to localStorage. It then
+     calls updateHeaderBadges() to refresh the wishlist count in the navigation.
+
+--------------------------------------------------------------------------------
+C. USER ACTIONS (Shopping Bag & Wishlist Mutation Functions)
+--------------------------------------------------------------------------------
+8. window.addToCart(productId, quantity, showNotification)
+   - Type: Global Action Handler (Exposed to window)
+   - Purpose: Adds a specified quantity of a product to the cart.
+   - Arguments: 
+     * productId (String) - ID of the product (e.g., 'product3')
+     * quantity (Number) - Amount to add (defaults to 1)
+     * showNotification (Boolean) - Whether to show the toast popup (defaults to true)
+   - Flow:
+     a. Checks if PRODUCTS database is defined globally. If not, aborts.
+     b. Looks up the product object from the PRODUCTS database using the ID. If not found, aborts.
+     c. Retrieves the current cart array via getCart().
+     d. Searches the cart for an existing item with the same ID.
+     e. If the item already exists in the cart, increments its quantity (qty) by the parameter.
+     f. If the item is new, pushes a new cart item object containing:
+        { id, name, price, image, category, qty: quantity }
+     g. Saves the updated cart via setCart().
+     h. If showNotification is true, triggers showToast() with a success message and
+        calls openCartSidebar() to slide the cart sidebar into view.
+
+9. window.removeFromCart(productId)
+   - Type: Global Action Handler (Exposed to window)
+   - Purpose: Removes an item entirely from the shopping cart.
+   - Arguments: productId (String)
+   - Flow:
+     a. Retrieves the current cart array.
+     b. Filters out any item that matches the given productId (creating a new array without it).
+     c. Saves the filtered array via setCart().
+     d. Triggers showToast() to notify the user that the item has been removed.
+
+10. window.updateCartQty(productId, qty)
+    - Type: Global Action Handler (Exposed to window)
+    - Purpose: Manually changes the quantity of an item from inside the cart sidebar.
+    - Arguments: 
+      * productId (String)
+      * qty (String/Number) - The new quantity
+    - Flow:
+      a. Retrieves the current cart array.
+      b. Finds the item object matching the productId.
+      c. Parses the new qty to a base-10 integer. Using Math.max(1, ...), ensures the 
+         quantity is clamped to a minimum of 1 (preventing zero or negative inputs).
+      d. Saves the updated cart via setCart().
+
+11. window.toggleWishlist(productId)
+    - Type: Global Action Handler (Exposed to window)
+    - Purpose: Toggles a product in/out of the user's wishlist.
+    - Arguments: productId (String)
+    - Flow:
+      a. Verifies that the product exists in the global PRODUCTS database.
+      b. Retrieves the current list of wishlisted product IDs via getWishlist().
+      c. Checks the index of productId in the list.
+      d. If the product ID is already in the wishlist (index !== -1):
+         - Removes the ID from the array using wishlist.splice(index, 1).
+         - Saves the wishlist state via setWishlist().
+         - Calls showToast() with a removal message.
+         - Fires a custom event ('wishlistChanged') containing the detail object:
+           { detail: { productId, inWishlist: false } } to update all hearts on the page.
+      e. If the product ID is not in the wishlist:
+         - Appends the ID to the array using wishlist.push(productId).
+         - Saves the wishlist state via setWishlist().
+         - Calls showToast() showing a heart symbol and added message.
+         - Fires the custom event ('wishlistChanged') with detail:
+           { detail: { productId, inWishlist: true } }.
+
+12. window.isInWishlist(productId)
+    - Type: Global Utility Helper (Exposed to window)
+    - Purpose: Queries whether a product is currently favorited.
+    - Arguments: productId (String)
+    - Returns: Boolean (true if favorited, false otherwise)
+    - Details: Runs getWishlist() and returns the evaluation of wishlist.includes(productId).
+
+--------------------------------------------------------------------------------
+D. DYNAMIC LAYOUT INJECTION
+--------------------------------------------------------------------------------
+13. injectHeader()
+    - Type: DOM Injection Utility
+    - Purpose: Generates and inserts the shared HTML navbar structure onto the page.
+    - Flow:
+      a. Stores a massive multiline HTML template string containing:
+         - Top bar navigation links (secure payment, appointment booking, contact).
+         - Main navigation grid dropdown structure for Eyeglasses, Sunglasses, Contacts, Special Power, and Stores.
+         - Interactive search input bar and trigger buttons.
+         - Wishlist and Shopping Bag icon triggers with badge elements.
+         - Mobile drawer hamburger icon and drawer body.
+      b. Locates any pre-existing <header> or .top-bar elements on the page and removes
+         them to prevent duplicates on layout re-renders.
+      c. Creates a virtual <div> element, sets its innerHTML to the header template.
+      d. Inserts the header elements at the very top of the page (before document.body's first child).
+
+14. injectFooter()
+    - Type: DOM Injection Utility
+    - Purpose: Generates and appends the shared footer at the bottom of every page.
+    - Flow:
+      a. Stores the global footer HTML template (About column, collections catalog links,
+         customer support links, security badges, accepted payment icons, and copyrights).
+      b. Finds and removes any existing <footer> to avoid duplicates.
+      c. Creates a virtual <div>, fills it with the footer HTML, and appends it to the end of the body.
+
+15. injectCartPanel()
+    - Type: DOM Injection Utility
+    - Purpose: Injects the cart sidebar slide-out, backdrop overlay, and toast alert container.
+    - Flow:
+      a. Stores the sidebar template containing:
+         - Sliding overlay background mask (.cart-backdrop).
+         - Sidebar panel (.cart-sidebar) including header counters, container list elements 
+           (#cartSidebarItems), summary fields (subtotal, promo discount, total payable), and buttons.
+         - The toast wrapper (#toastContainer) where alert messages will be appended.
+      b. Creates a virtual <div>, fills it with the template, and appends it to the document body.
+
+--------------------------------------------------------------------------------
+E. CART SIDEBAR & RENDERING CONTROLLERS
+--------------------------------------------------------------------------------
+16. window.openCartSidebar()
+    - Type: UI Visibility Controller (Exposed to window)
+    - Purpose: Opens the shopping cart panel and locks the screen background.
+    - Flow:
+      a. Grabs the sidebar element and backdrop element, adding active CSS classes:
+         'open' and 'visible'.
+      b. Sets document.body.style.overflow = 'hidden' to lock browser scroll on the background page.
+      c. Invokes renderCartItems() to refresh prices, item counts, and catalog cards.
+
+17. window.closeCartSidebar()
+    - Type: UI Visibility Controller (Exposed to window)
+    - Purpose: Closes the shopping cart panel and unlocks scrolling.
+    - Flow:
+      a. Removes the active classes ('open' and 'visible') from the sidebar and backdrop.
+      b. Resets document.body.style.overflow = '' to re-enable page scrolling.
+
+18. renderCartItems()
+    - Type: Dynamic DOM Renderer
+    - Purpose: Builds the list of products currently inside the cart panel and computes pricing.
+    - Flow:
+      a. Locates the items container element (#cartSidebarItems) in the DOM. If not found, aborts.
+      b. Retrieves the current cart array using getCart().
+      c. If the cart is empty (length === 0):
+         - Injects an empty cart message containing a link to shop.html.
+         - Resets counts to '0', and pricing tags to '₹0'.
+         - Hides the discount display row (display = 'none') and terminates execution.
+      d. If the cart has items:
+         - Initializes numeric accumulators: subtotal = 0, itemsCount = 0.
+         - Initializes an empty HTML template accumulator.
+         - Loops through each item in the cart array:
+           * Multiplies the item's unit price by its quantity (item.qty) and adds it to subtotal.
+           * Adds the item's quantity to itemsCount.
+           * Concatenates an HTML card layout for the item, inserting the name, category tag, 
+             formatted unit price, and a quantity controller (plus/minus buttons linked to 
+             changeQtyClick() and an input box linked to updateCartQty()). It also appends 
+             a "Remove" button linked to removeFromCart().
+         - Sets the accumulated HTML string as the innerHTML of the container.
+         - Checks if the promo code 'AURA10' is active in localStorage:
+           * If active: calculates a 10% discount from the subtotal, subtracts it to get 
+             the finalTotal, displays the discount row, and sets the value.
+           * If inactive: sets finalTotal equal to subtotal and hides the discount row.
+         - Sets the innerText of badge counts and updates final formatted total outputs.
+
+19. window.changeQtyClick(productId, delta)
+    - Type: Inline Event Helper (Exposed to window)
+    - Purpose: Increments or decrements item quantities from the cart sidebar buttons (+ / -).
+    - Arguments: 
+      * productId (String)
+      * delta (Number) - Can be +1 or -1
+    - Flow:
+      a. Retrieves the current cart array.
+      b. Finds the item object.
+      c. Modifies the qty value by adding delta. Restricts it to a minimum of 1.
+      d. Saves the updated cart via setCart().
+
+--------------------------------------------------------------------------------
+F. NAVIGATION EVENT LISTENERS & BADGES
+--------------------------------------------------------------------------------
+20. updateHeaderBadges()
+    - Type: UI Synchronizer
+    - Purpose: Syncs cart and wishlist badge counts displayed on top navigation icons.
+    - Flow:
+      a. Gets the current cart array and sum-aggregates the total quantities of all items.
+      b. Gets the current wishlist array length.
+      c. Queries all cart badge DOM elements (.cart-badge) and wishlist badges (.wishlist-badge).
+      d. Loops through them to inject the values.
+      e. Toggles the display style: if the count is greater than 0, sets style to 'inline-block'
+         to make it visible; otherwise, sets it to 'none' to hide it.
+
+21. setupNavigationEvents()
+    - Type: Events Configurator
+    - Purpose: Binds essential interactive handlers to global navigation elements.
+    - Listeners:
+      a. Hamburger Toggle Click:
+         - Binds click listener to mobile menu toggle button (#mobileMenuToggle).
+         - Toggles CSS class 'active' on the button and class 'open' on the mobile drawer 
+           (#mobileNavDrawer) to slide it open/closed.
+      b. Window Scroll Sticky Header:
+         - Binds listener to window's 'scroll' event.
+         - Checks if vertical scroll offset window.scrollY is greater than 50.
+         - If true: adds the CSS class 'scrolled' to the header (triggering shadow/blur effects).
+         - If false: removes the class.
+      c. Navigation Search Input:
+         - Selects search input (#navSearchInput) and search icon (.search-trigger-btn).
+         - Defines triggerSearch() function: grabs search string, trims whitespaces, and if 
+           not empty, redirects page location to `shop.html?search=ENCODED_VALUE`.
+         - Binds keydown event to input box: runs triggerSearch() if e.key is 'Enter'.
+         - Binds click event to search icon: runs triggerSearch().
+
+22. highlightActiveNav()
+    - Type: UI Visual Helper
+    - Purpose: Scans URL to highlight the active collection link (underlines the current page).
+    - Flow:
+      a. Extracts the current path from window.location.pathname (defaults to index.html).
+      b. Clears the 'active' CSS class from all main navigation anchor links.
+      c. Compares page files and URL query parameters:
+         - If page is 'shop.html' and query '?category=eyeglasses' is present: underlines EYEGLASSES link.
+         - If page is 'shop.html' and query '?category=sunglasses' is present: underlines SUNGLASSES link.
+         - If page is 'shop.html' and query '?category=contacts' is present: underlines CONTACTS link.
+         - If page is 'special-power.html': underlines SPECIAL POWER link.
+         - If page is 'stores.html': underlines STORES link.
+
+23. window.showToast(message)
+    - Type: Global Alert Notification Utility (Exposed to window)
+    - Purpose: Spawns a floating notification message slide-in in the lower-left corner.
+    - Arguments: message (String) - Content message (supports HTML formatting)
+    - Flow:
+      a. Queries the notification container (#toastContainer). If missing, aborts.
+      b. Creates a new <div> element, assigns class name 'toast', and sets its innerHTML.
+      c. Appends the newly created toast element into the container.
+      d. Uses a setTimeout of 10 milliseconds to add the 'show' class. (This delay is 
+         required for the browser to register the initial state and trigger the transition animation).
+      e. Sets a timeout of 3.5 seconds to fade the toast out by removing the 'show' class.
+      f. Sets another nested timeout of 400 milliseconds (giving the CSS opacity transition time to complete) 
+         to remove the toast element from the DOM entirely to clean up memory.
+
+
+================================================================================
+SECTION 2: product.html
+================================================================================
+This script controls the dynamic product page. It decodes the URL parameter id, 
+queries the product database, loads structural specs details dynamically, and sets up 
+recommendations and configurations based on the eyewear category.
+
+--------------------------------------------------------------------------------
+A. PAGE INITIALIZATION
+--------------------------------------------------------------------------------
+1. Event Listener: 'DOMContentLoaded'
+   - Flow:
+     a. Sets a 100ms timeout before triggering loadProductDetail(). This minor delay
+        ensures that the products-db.js file has finished loading and registering the 
+        global PRODUCTS object before we query it.
+     b. Registers a listener for the custom event 'wishlistChanged' (fired from shared.js):
+        - When received, checks if the event details match the activeProductId. If yes,
+          calls syncWishlistButton() to keep the main heart icon state synchronized.
+        - Scans the page for any recommended cards (.p-card-wishlist) matching the changed ID 
+          and toggles their styling classes and characters (❤️ or ♡) to stay in sync.
+
+--------------------------------------------------------------------------------
+B. DATA FETCHING & RENDERING LOGIC
+--------------------------------------------------------------------------------
+2. loadProductDetail()
+   - Type: Controller / Loader
+   - Purpose: Reads query parameters, looks up details, and updates the page content.
+   - Flow:
+     a. Creates a URLSearchParams object from window.location.search.
+     b. Fetches the value of query key 'id'.
+     c. Validates input: If 'id' is null, or the global object 'PRODUCTS' is undefined,
+        or the product is not in the database, runs showNotFound() and terminates.
+     d. Sets global variables: activeProductId = id, and activeProduct = PRODUCTS[id].
+     e. Updates breadcrumbs: sets category name, navigates links to category parameters,
+        and sets name elements.
+     f. Sets document.title to display "[Product Name] | OpticAura Premium".
+     g. Injects product image path into main photo tag (#detailMainImg).
+     h. Runs renderThumbnails() to display alternate view options.
+     i. Updates meta details: category tag, product name title, and price label.
+     j. Updates description text (defaults to fallback description if database field is empty).
+     k. Generates random review statistics (score between 4.5 and 5.0, count between 12 and 57) 
+        to simulate premium social proof reviews.
+     l. Runs renderSpecsOptions() to render category-specific configurations.
+     m. Runs renderChecklist() to display bulleted list features.
+     n. Queries window.isInWishlist(activeProductId) and runs syncWishlistButton() to set the heart state.
+     o. Runs renderRelatedRecommendations() to load similar frames.
+
+3. renderThumbnails()
+   - Type: DOM Helper
+   - Purpose: Renders 3 thumbnail image options for alternative viewpoints.
+   - Flow:
+     a. Grabs the thumbnail container (#thumbnailBar).
+     b. Defines array alternateImages. The first image is always the product's main image.
+     c. Checks category:
+        - If 'eyeglasses': appends generic files 'assets/eyeglasses_img.png' and 'assets/eyeglasses_img2.png'.
+        - If 'sunglasses': appends generic files 'assets/sg1.png' and 'assets/sg2.png'.
+        - Else (Contacts): appends generic files 'assets/cont2.png' and 'assets/cont3.png'.
+     d. Loops through the alternateImages array:
+        - Appends a button. The first index receives the CSS class 'active'.
+        - Binds click trigger linking to global function switchMainImage().
+     e. Inserts generated HTML.
+
+4. window.switchMainImage(src, btn)
+   - Type: Event Handler (Exposed to window)
+   - Purpose: Switches the big main product display.
+   - Arguments: src (String), btn (HTML Button Object)
+   - Flow:
+     a. Updates the src attribute of `#detailMainImg` to the new path.
+     b. Loops through all thumbnail buttons, removing the 'active' CSS highlight.
+     c. Adds the 'active' class to the clicked button (btn).
+
+5. renderSpecsOptions()
+   - Type: Component Builder
+   - Purpose: Renders frame sizing or contact lens power options based on product category.
+   - Flow:
+     a. Selects configuration box (#optionsBox).
+     b. If product category is 'eyeglasses' or 'sunglasses', appends a size selection row
+        (Standard Fit, Narrow Fit, Wide Fit) and upgrade options (Clear Lenses, Blue Cut Shield, Photochromic).
+     c. If product category is anything else (Contacts), appends corrective S.P.H power dropdown
+        (Zero Power, -1.00 down to -6.00) and packaging supply quantity boxes.
+     d. Injects the built HTML.
+
+6. window.selectConfigOption(pill)
+   - Type: UI Helper (Exposed to window)
+   - Purpose: Highlights selected options (Frame fits, lens index, contact power) on click.
+   - Arguments: pill (HTML element clicked)
+   - Flow:
+     a. Grabs parent row container (pill.parentNode).
+     b. Finds all child option pills and removes the class name 'active'.
+     c. Adds the class name 'active' to the clicked pill to highlight it.
+
+7. renderChecklist()
+   - Type: DOM Helper
+   - Purpose: Renders lists of product specifications.
+   - Flow:
+     a. Selects features list container (#detailFeaturesList).
+     b. Retreives the product features array. If empty, falls back to a list of premium quality statements.
+     c. Maps the features into HTML list elements: `<li>${feature}</li>`.
+     d. Injects the items.
+
+8. syncWishlistButton(inWishlist)
+   - Type: UI Synchronizer
+   - Purpose: Sets the visual style of the wishlist button.
+   - Arguments: inWishlist (Boolean)
+   - Details: Selects `#detailWishBtn`. If inWishlist is true, adds the 'active' CSS class
+     and changes the character output to '❤️'; otherwise, removes the class and sets the symbol to '♡'.
+
+--------------------------------------------------------------------------------
+C. PRODUCT ACTIONS
+--------------------------------------------------------------------------------
+9. window.adjustQty(delta)
+   - Type: Event Handler (Exposed to window)
+   - Purpose: Multi-incrementer buttons (+ / -) for changing quantity.
+   - Arguments: delta (Number) - Can be +1 or -1
+   - Flow:
+     a. Gets the quantity input field (#detailQty).
+     b. Parses its value to an integer.
+     c. Adds delta and uses Math.max(1, value) to ensure it cannot drop below 1.
+     d. Sets the new value.
+
+10. window.handleAddToBag()
+    - Type: Event Handler (Exposed to window)
+    - Purpose: Submits the active product and quantity configuration to the cart state.
+    - Flow:
+      a. Reads parsed value of `#detailQty`.
+      b. Invokes the global state manipulator window.addToCart(activeProductId, qty).
+
+11. window.handleWishlistToggle()
+    - Type: Event Handler (Exposed to window)
+    - Purpose: Submits wishlist toggle commands.
+    - Flow:
+      a. Invokes the global state manipulator window.toggleWishlist(activeProductId).
+
+--------------------------------------------------------------------------------
+D. RECOMMENDATIONS ENGINE
+--------------------------------------------------------------------------------
+12. renderRelatedRecommendations()
+    - Type: Recommendations Algorithm
+    - Purpose: Identifies and renders 4 related items matching the product's category.
+    - Flow:
+      a. Selects recommendations grid element (#recommendationsGrid).
+      b. Checks if PRODUCTS database is defined.
+      c. Filters PRODUCTS array into a sub-list containing only products whose category
+         matches activeProduct.category AND whose id is not equal to activeProductId.
+      d. Randomizes the list sequence using a simple shuffle: list.sort(() => 0.5 - Math.random()).
+      e. Takes the first 4 items from the shuffled sub-list using list.slice(0, 4).
+      f. If zero matches are found, hides the recommended section entirely.
+      g. If matches exist, loops through the selected array to build card structures. 
+         For each recommended card:
+         - Evaluates if the price exceeds ₹3,500. If so, appends a "Top Pick" badge.
+         - Checks if the item is wishlisted, assigning active classes and ❤️ or ♡ symbols.
+         - Binds product page navigation to the card's image wrap.
+         - Binds click events on the wishlist heart icon to handleWishlistClick().
+         - Binds click events on "ADD TO BAG" button to window.addToCart().
+      h. Injects accumulated HTML code.
+
+13. handleWishlistClick(id, element)
+    - Type: Helper Event Handler
+    - Purpose: Handles clicking on recommended cards' wishlist icon.
+    - Arguments: id (String), element (HTML element)
+    - Details: Stops event propagation so clicking the heart doesn't trigger navigation
+      to the product page, and invokes window.toggleWishlist(id).
+
+14. showNotFound()
+    - Type: Visibility Switcher
+    - Purpose: Triggers alternate page layout when a product is invalid/not found.
+    - Details: Hides main product detail sections (#productDetailSection) and recommended
+      grids, and shows the "Product Not Found" fallback card.
+
+
+================================================================================
+SECTION 3: shop.html
+================================================================================
+This script runs the shop catalog page. It gathers check inputs (categories, 
+subcategories, pricing), processes real-time search queries, sorts items, 
+generates the gallery grid, and updates parameters back into the URL bar.
+
+--------------------------------------------------------------------------------
+A. PAGE INITIALIZATION
+--------------------------------------------------------------------------------
+1. Event Listener: 'DOMContentLoaded'
+   - Flow:
+     a. Sets a 100ms timeout to initialize filters from URL parameters and run
+        the initial filter loop via applyFilters().
+     b. Registers listener for 'wishlistChanged':
+        - Synchronizes heart card icons across the catalog grid.
+        - If the "My Wishlist" filter checkbox (#tag-wishlist) is checked, removing
+          an item from the wishlist will re-run applyFilters() to remove the card
+          from the grid.
+
+--------------------------------------------------------------------------------
+B. DATA BINDING & INTERACTION LOGIC
+--------------------------------------------------------------------------------
+2. initializeFiltersFromUrl()
+   - Type: URL Router Parser
+   - Purpose: Scans query strings to check the corresponding filter inputs on page load.
+   - Flow:
+     a. Creates a URLSearchParams object.
+     b. If query parameter 'category' is active, finds the matching category checkbox
+        (cat-eyeglasses, cat-sunglasses, cat-contacts) and sets checked = true.
+     c. If query parameter 'sub' is active, finds the matching subcategory checkbox and
+        sets checked = true.
+     d. If query parameter 'wishlist' is set to 'true', checks the tag-wishlist box.
+     e. If query parameter 'search' is active:
+        - Stores the search string in window.activeSearchTerm.
+        - Injects the search text into the header navigation input box.
+
+3. applyFilters()
+   - Type: Central Catalog Engine
+   - Purpose: Filters, searches, sorts, and renders products in the catalog.
+   - Flow:
+     a. Validates PRODUCTS database.
+     b. Selects DOM references: grid container, empty state, results count, search breadcrumbs.
+     c. Gathers all checked values:
+        - selectedCats: array of checked category values.
+        - selectedSubs: array of checked demographic/style values.
+        - selectedPriceRanges: array of checked price range strings.
+        - isWishlistOnly: boolean indicating if the wishlist-only filter is checked.
+        - sortBy: current value of the sort selector dropdown.
+        - searchTerm: window.activeSearchTerm string.
+     d. Creates a copy of all database values: list = Object.values(PRODUCTS).
+     e. Applies Search Filter:
+        - If searchTerm is not empty, filters list to retain only items where the name,
+          description, or category contains the search term.
+        - Updates the breadcrumbs label to show: Active Search: "SearchTerm".
+        - If empty, clears the breadcrumb label.
+     f. Applies Category Filters:
+        - If selectedCats array has values, filters list to keep only items whose
+          category is in the selectedCats array.
+     g. Applies Subcategory Filters:
+        - If selectedSubs has values, filters list to keep only items whose subcategory
+          is in the selectedSubs array.
+     h. Applies Price Filters:
+        - If selectedPriceRanges has values, filters list. Checks if the item's price
+          matches any of the selected price ranges:
+          * 'under-1000': price < 1000
+          * '1000-2000': price between 1000 and 2000
+          * '2000-3000': price between 2000 and 3000
+          * '3000-4000': price between 3000 and 4000
+          * 'over-4000': price > 4000
+     i. Applies Wishlist Filter:
+        - If isWishlistOnly is checked, retrieves the wishlist array via window.getWishlist()
+          and retains only products whose IDs are in the wishlist array.
+     j. Sorts the filtered array:
+        - 'low-to-high': a.price - b.price (ascending)
+        - 'high-to-low': b.price - a.price (descending)
+        - 'alphabetical': a.name.localeCompare(b.name) (alphabetical A-Z)
+        - Default: Retains database order.
+     k. Updates UI views:
+        - Sets the results count text to list.length.
+        - If no products remain (list.length === 0): hides the grid, shows the empty state card, and returns.
+        - If products exist: hides the empty state, shows the grid, and loops through the list.
+     l. Builds card HTML structures:
+        - Sets a "Trendy" badge for high-priced or specific items.
+        - Sets heart styles (❤️/♡) based on wishlist status.
+        - Appends layouts with details (image, category, title, localized price, buttons).
+     m. Injects the generated HTML into the grid.
+
+4. resetAllFilters()
+   - Type: Controller / Reset Helper
+   - Purpose: Clears all active filters, inputs, search keywords, and URL parameters.
+   - Flow:
+     a. Checks if window.location.search exists. If yes, uses window.history.pushState()
+        to clear parameters from the address bar without reloading the page.
+     b. Resets window.activeSearchTerm = ''.
+     c. Loops through all checkbox elements in the sidebar and sets checked = false.
+     d. Clears the navigation search input value.
+     e. Runs applyFilters() to reload the full product catalog.
+
+5. handleWishlistClick(id, element)
+   - Type: Helper Event Handler
+   - Purpose: Handles clicking on recommended cards' wishlist icon.
+   - Arguments: id (String), element (HTML element)
+   - Details: Stops event propagation and calls window.toggleWishlist(id).
+
+
+================================================================================
+SECTION 4: special-power.html
+================================================================================
+This script powers the interactive comparison slider showcase, allowing users
+to simulate optical lens coatings.
+
+--------------------------------------------------------------------------------
+A. COATING COMPARISON SIMULATOR
+--------------------------------------------------------------------------------
+1. handleSliderChange(val)
+   - Type: Event Handler
+   - Purpose: Adjusts the slider division overlay dynamically.
+   - Arguments: val (Number) - Current value of the slider range element (0 to 100)
+   - Flow:
+     a. Selects the glassmorphic overlay element (#compareShield).
+     b. Computes the remaining width percentage as 100 - val.
+     c. Sets the style.width of the overlay element: shield.style.width = `${100 - val}%`.
+     d. Dragging the slider shifts the partition boundary, showing standard clear glass
+        on the left versus the blue-cut deflector glaze on the right.
+================================================================================

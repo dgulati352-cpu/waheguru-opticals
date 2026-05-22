@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <script>
+    if (!localStorage.getItem('opticaura_logged_in')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support | Waheguru Aura Optix</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="09_style.css">
+
+
+</head>
+<body>
+            <!-- ===================== TOP BAR ===================== -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <a href="01_about_us.html">About us</a>
+            <a href="02_contact_us.html">Contact Us</a>
+            <a href="03_eye_care.html">Eye Care</a>
+            <a href="04_new_arrival.html">New Arrivals</a>
+            <a href="05_best_seller.html">Best Sellers</a>
+            <a href="06_offline_store.html">Offline Stores</a>
+            <a href="07_book_app.html">Book Appointment</a>
+            <a href="08_privacy_policy.html">Privacy Policy</a>
+            <a href="09_help.html">Help</a>
+            <a href="#" onclick="localStorage.removeItem('opticaura_logged_in'); window.location.reload();" style="color: #ff6b6b !important; font-weight: 600;">Logout</a>
+        </div>
+    </div>
+
+
+    <!-- ===================== NAVBAR ===================== -->
+    <header class="main-header">
+        <div class="main-header-container">
+            <a href="index.html" class="logo">
+                <img src="img0.jpeg" alt="Logo">
+                WAHEGURU AURA OPTIX
+            </a>
+            <nav class="main-nav">
+                <div class="dropdown">
+                    <a href="shop.html?category=eyeglasses">EYEGLASSES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=eyeglasses&sub=men">Men's Eyeglasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=women">Women's Eyeglasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=computer">Computer Glasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=kids">Kids' Eyeglasses</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="shop.html?category=sunglasses">SUNGLASSES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=sunglasses&sub=men">Men's Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=women">Women's Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=icon">Power Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=sports">Sports Sunglasses</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="shop.html?category=contacts">CONTACTS</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=contacts&sub=daily">Daily Disposable</a></li>
+                        <li><a href="shop.html?category=contacts&sub=monthly">Monthly Disposable</a></li>
+                        <li><a href="shop.html?category=contacts&sub=colored">Colored Contact Lenses</a></li>
+                        <li><a href="shop.html?category=contacts&sub=lens">Contact Lens Solution & Care</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="special-power.html">SPECIAL POWER</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="special-power.html">High Power Lenses</a></li>
+                        <li><a href="special-power.html">Cylinder Power Lenses</a></li>
+                        <li><a href="special-power.html">Photochromic Lenses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=computer">Blue Cut + UV Protection</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="06_offline_store.html">STORES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="06_offline_store.html">Find a Store Near You</a></li>
+                        <li><a href="06_offline_store.html">Official Stores</a></li>
+                        <li><a href="07_book_app.html">Book Eye Test Appointment</a></li>
+                        <li><a href="07_book_app.html">Home Eye Check-up</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="header-icons">
+                <a href="shop.html" class="cart-icon">🛒</a>
+            </div>
+        </div>
+    </header>
+
+<header class="help-hero">
+    <h1>How can we help?</h1>
+   
+</header>
+
+<main class="help-container">
+    
+    <div class="category-title">Orders & Shipping</div>
+    
+    <div class="faq-item">
+        <input type="checkbox" id="faq1" class="faq-input">
+        <label for="faq1" class="faq-label">How can I track my eyewear order?</label>
+        <div class="faq-content">
+            Once your frames leave our laboratory, you will receive an email with a tracking number. Premium lens crafting typically takes 3-5 business days.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <input type="checkbox" id="faq2" class="faq-input">
+        <label for="faq2" class="faq-label">What is your return policy?</label>
+        <div class="faq-content">
+            We offer a 30-day "Perfect Fit" guarantee. If your frames don't feel right, we provide one-time free adjustments or a full exchange for a different style.
+        </div>
+    </div>
+
+    <div class="category-title">Prescriptions</div>
+
+    <div class="faq-item">
+        <input type="checkbox" id="faq3" class="faq-input">
+        <label for="faq3" class="faq-label">Can I use my existing prescription?</label>
+        <div class="faq-content">
+            Yes, as long as it has been issued within the last 24 months. You can upload a photo of your prescription during checkout or email it to our specialists.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <input type="checkbox" id="faq4" class="faq-input">
+        <label for="faq4" class="faq-label">Do you offer progressive lenses?</label>
+        <div class="faq-content">
+            We specialize in HD Digital Progressive lenses that provide seamless transitions between near, intermediate, and far distances.
+        </div>
+    </div>
+
+    <div class="support-grid">
+        <div class="support-card">
+            <h3>Email Support</h3>
+            <p>support@waheguruauraoptix.com</p>
+            <p>Response within 24hrs</p>
+        </div>
+        <div class="support-card">
+            <h3>Live Chat</h3>
+            <p>Available Mon-Fri</p>
+            <p>9:00 AM - 6:00 PM</p>
+        </div>
+
+    </div>
+</main>
+
+<footer>
+    <p>© 2026 WAHEGURU AURA OPTIX</p>
+</footer>
+
+</body>
+</html>

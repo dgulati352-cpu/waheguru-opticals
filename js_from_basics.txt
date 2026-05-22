@@ -1,0 +1,520 @@
+================================================================================
+            OPTICAURA PROJECT EVALUATION PREPARATION: JAVASCRIPT FROM BASICS
+================================================================================
+
+This file is a beginner-friendly, line-by-line explanation of the entire 
+JavaScript code in your project. It starts with a simple "Cheat Sheet" of basic 
+programming terms so you can confidently answer questions during your project 
+evaluation tomorrow.
+
+--------------------------------------------------------------------------------
+PART 1: JAVASCRIPT BASICS CHEAT SHEET (MUST READ FOR EVALUATION)
+--------------------------------------------------------------------------------
+
+Before explaining the files, here are the absolute basics of JavaScript:
+
+1. VARIABLES (Memory Containers):
+   - `const`: Declares a variable that CANNOT be changed later. Used for values 
+     or elements that remain constant (e.g., const logo = "OpticAura").
+   - `let`: Declares a variable that CAN be reassigned later (e.g., let count = 0; count = 1;).
+
+2. DATA TYPES (Values):
+   - String: Text wrapped in quotes, like "eyeglasses" or 'sg1'.
+   - Number: Numeric values, like 1849 or 5.
+   - Boolean: True or False (like true/false).
+   - Array: A list of items enclosed in square brackets, like ['item1', 'item2'].
+   - Object: A collection of data inside curly braces with keys and values, like:
+     { id: "sg1", name: "Aviator Sunglasses", price: 1799 }
+
+3. FUNCTIONS (Re-usable Code Blocks):
+   - A function is a block of code designed to perform a specific task.
+   - Modern JavaScript uses Arrow Functions:
+     const sayHello = () => { console.log("Hello!"); };
+     This is a modern, shorter way of writing:
+     function sayHello() { console.log("Hello!"); }
+
+4. EVENT LISTENERS (Interactive Triggers):
+   - Tells the browser to wait for a user action (like a click, a scroll, or a keyboard press)
+     and then run some code. Example:
+     button.addEventListener('click', () => { alert('Clicked!'); });
+
+5. THE DOM (Document Object Model):
+   - The DOM is the structure of the HTML page. JavaScript reads and edits it using:
+     * `document.getElementById('myId')`: Finds an element by its ID.
+     * `document.querySelectorAll('.myClass')`: Finds all elements matching a class name.
+     * `element.innerHTML`: Changes the HTML code inside a selected element.
+     * `element.classList.add('open')` / `remove('open')`: Adds or removes a CSS class to style or hide elements.
+
+6. LOCALSTORAGE (Browser Memory):
+   - A simple database built into the browser. It saves data even if you refresh or close the page.
+     * `localStorage.setItem('key', 'value')`: Saves data.
+     * `localStorage.getItem('key')`: Reads data.
+
+7. JSON (JavaScript Object Notation):
+   - LocalStorage can only store text (Strings). To save lists (arrays) or objects, we use JSON:
+     * `JSON.stringify(myArray)`: Converts a list/object into plain text (a string) so it can be saved.
+     * `JSON.parse(myString)`: Converts the text back into a list/object so JavaScript can read it.
+
+8. URL QUERY PARAMETERS (Passing Data between Pages):
+   - In a URL like `product.html?id=sg3`, the `?id=sg3` is a query parameter.
+   - We use `new URLSearchParams(window.location.search)` to extract the value `sg3` 
+     so JavaScript knows which product details to load.
+
+9. WINDOW OBJECT (Global Scope):
+   - The `window` is the global browser window object.
+   - If we write `window.addToCart = ...`, we make the `addToCart` function global, 
+     meaning it can be used by scripts in other files (like product.html or shop.html).
+
+
+================================================================================
+PART 2: LINE-BY-LINE EXPLANATION OF js/shared.js
+================================================================================
+This file runs on every page. It maintains the cart and wishlist states, 
+injects the header/footer layouts, and triggers toast alerts.
+
+--------------------------------------------------------------------------------
+A. APPLICATION LIFECYCLE
+--------------------------------------------------------------------------------
+Line: `document.addEventListener('DOMContentLoaded', () => { ... });`
+  - What it does: Tells the browser: "Wait until the HTML webpage structure is completely 
+    loaded, and then execute all the functions inside this block."
+  - Functions executed inside it:
+    * `initCart()`: Prepares the empty cart database in the browser.
+    * `initWishlist()`: Prepares the empty wishlist database.
+    * `injectHeader()`: Generates and draws the navigation header.
+    * `injectFooter()`: Generates and draws the website footer.
+    * `injectCartPanel()`: Injects the hidden shopping cart sidebar and toast container.
+    * `setupNavigationEvents()`: Sets up search inputs, scroll events, and mobile menus.
+    * `updateHeaderBadges()`: Updates the counter badges on the cart and wishlist icons.
+    * `renderCartItems()`: Loads the items currently inside the shopping bag.
+    * `highlightActiveNav()`: Highlights/underlines the menu tab of the active page.
+
+--------------------------------------------------------------------------------
+B. BROWSER DATABASE (localStorage Management)
+--------------------------------------------------------------------------------
+Line: `const initCart = () => { ... }`
+  - What it does: Creates a function to initialize the shopping cart.
+  - Inside it:
+    * `if (!localStorage.getItem('opticaura_cart'))` 
+      -> Checks if there is no item named 'opticaura_cart' in the browser memory.
+    * `localStorage.setItem('opticaura_cart', JSON.stringify([]));` 
+      -> If it does not exist, save an empty array `[]` converted to a text string.
+
+Line: `const initWishlist = () => { ... }`
+  - What it does: Initializes the wishlist in the browser memory.
+  - Inside it:
+    * `if (!localStorage.getItem('opticaura_wishlist'))` 
+      -> Checks if there is no wishlist in memory.
+    * `localStorage.setItem('opticaura_wishlist', JSON.stringify([]));` 
+      -> If not, saves an empty array `[]` as text.
+
+Line: `const getCart = () => { ... }`
+  - What it does: A helper function that reads and returns the shopping cart list.
+  - Inside it:
+    * `return JSON.parse(localStorage.getItem('opticaura_cart')) || [];` 
+      -> Reads the text string from memory, converts it back into a JavaScript list, and 
+         returns it. If anything is broken, returns an empty list `[]`.
+
+Line: `const setCart = (cart) => { ... }`
+  - What it does: Saves the updated cart to memory and updates the visible webpage.
+  - Arguments: `cart` (the updated cart list array)
+  - Inside it:
+    * `localStorage.setItem('opticaura_cart', JSON.stringify(cart));` 
+      -> Converts the list array to text and saves it.
+    * `updateHeaderBadges();` 
+      -> Updates the counts on the cart navigation icons.
+    * `renderCartItems();` 
+      -> Re-draws the list of items inside the slide-out cart sidebar.
+
+Line: `const getWishlist = () => { ... }`
+  - What it does: Reads and returns the wishlist array.
+  - Inside it:
+    * `return JSON.parse(localStorage.getItem('opticaura_wishlist')) || [];` 
+      -> Fetches the wishlist text and parses it back into a list.
+
+Line: `const setWishlist = (wishlist) => { ... }`
+  - What it does: Saves the wishlist array to browser memory.
+  - Inside it:
+    * `localStorage.setItem('opticaura_wishlist', JSON.stringify(wishlist));` 
+      -> Saves the list as text.
+    * `updateHeaderBadges();` 
+      -> Updates the counts on the wishlist icon.
+
+--------------------------------------------------------------------------------
+C. USER ACTIONS
+--------------------------------------------------------------------------------
+Line: `window.addToCart = (productId, quantity = 1, showNotification = true) => { ... }`
+  - What it does: Adds a product to the cart. It is attached to `window` so any page 
+    can use it.
+  - Inside it:
+    * `if (typeof PRODUCTS === 'undefined') return;` 
+      -> If the database of products is not loaded, stop.
+    * `const product = PRODUCTS[productId];` 
+      -> Retrieve the details of the clicked product from the database.
+    * `const cart = getCart();` 
+      -> Read the current items in the cart.
+    * `const existingItem = cart.find(item => item.id === productId);` 
+      -> Checks if this product is already in the cart.
+    * `if (existingItem) { existingItem.qty += quantity; }` 
+      -> If it is, increase its quantity.
+    * `else { cart.push({ id: product.id, name: product.name, price: product.price, ... }); }` 
+      -> If it's a new item, add a new product block to the cart array.
+    * `setCart(cart);` 
+      -> Save the updated cart.
+    * `if (showNotification) { showToast('Added to bag'); openCartSidebar(); }` 
+      -> If true, pop up a notification toast and slide open the cart sidebar.
+
+Line: `window.removeFromCart = (productId) => { ... }`
+  - What it does: Deletes an item from the cart.
+  - Inside it:
+    * `let cart = getCart();` 
+      -> Read the current cart list.
+    * `cart = cart.filter(item => item.id !== productId);` 
+      -> Keep only the items that do NOT match this product ID.
+    * `setCart(cart);` 
+      -> Save the updated list.
+    * `showToast('Item removed');` 
+      -> Display a notification toast.
+
+Line: `window.updateCartQty = (productId, qty) => { ... }`
+  - What it does: Manually changes the quantity of an item from inside the cart sidebar.
+  - Inside it:
+    * `const cart = getCart();` 
+      -> Read current cart.
+    * `const item = cart.find(item => item.id === productId);` 
+      -> Find the target item.
+    * `item.qty = Math.max(1, parseInt(qty));` 
+      -> Convert the input to a number. Ensure the count cannot be lower than 1.
+    * `setCart(cart);` 
+      -> Save the updated quantity.
+
+Line: `window.toggleWishlist = (productId) => { ... }`
+  - What it does: Adds an item to the wishlist if it isn't there, or removes it if it is.
+  - Inside it:
+    * `const wishlist = getWishlist();` 
+      -> Get favorited items.
+    * `const index = wishlist.indexOf(productId);` 
+      -> Find the index of this product ID in the array.
+    * `if (index !== -1) { wishlist.splice(index, 1); ... }` 
+      -> If found (index is not -1), delete it from the list using splice. Save it, 
+         show a "Removed from wishlist" toast, and dispatch a custom event 
+         `wishlistChanged` so other elements update.
+    * `else { wishlist.push(productId); ... }` 
+      -> If not found, add it to the array. Save it, show an "Added to wishlist" toast, 
+         and dispatch the custom event.
+
+Line: `window.isInWishlist = (productId) => { ... }`
+  - What it does: Checks if a product is favorited.
+  - Inside it:
+    * `return getWishlist().includes(productId);` 
+      -> Returns true if the wishlist list contains this ID, else returns false.
+
+--------------------------------------------------------------------------------
+D. DYNAMIC LAYOUT INJECTIONS
+--------------------------------------------------------------------------------
+Line: `const injectHeader = () => { ... }`
+  - What it does: Dynamically draws the header navigation bar on top of the page.
+  - Inside it:
+    * `const headerHtml = \`...\`;` 
+      -> Stores the HTML layout structure for the navbar.
+    * `document.querySelectorAll('header, .top-bar').forEach(el => el.remove());` 
+      -> Removes any old headers to avoid duplicates.
+    * `const wrapper = document.createElement('div');` 
+      -> Creates a virtual box.
+    * `wrapper.innerHTML = headerHtml;` 
+      -> Fills it with the HTML navbar code.
+    * `document.body.insertBefore(wrapper, document.body.firstChild);` 
+      -> Places the header at the very top of the page.
+
+Line: `const injectFooter = () => { ... }`
+  - What it does: Draws the footer layout at the bottom of the page.
+  - Inside it:
+    * `const footerHtml = \`...\`;` 
+      -> Stores the footer HTML.
+    * `document.querySelectorAll('footer').forEach(el => el.remove());` 
+      -> Removes old footers.
+    * `const wrapper = document.createElement('div'); wrapper.innerHTML = footerHtml;` 
+      -> Fills the wrapper.
+    * `document.body.appendChild(wrapper);` 
+      -> Appends it to the very bottom of the page.
+
+Line: `const injectCartPanel = () => { ... }`
+  - What it does: Injects the shopping cart sidebar slider and the toast notifications alert container.
+  - Inside it:
+    * `const panelHtml = \`...\`;` 
+      -> Stores the sidebar panel layout code.
+    * `const wrapper = document.createElement('div'); wrapper.innerHTML = panelHtml;`
+    * `document.body.appendChild(wrapper);` 
+      -> Appends the sidebar structure to the body.
+
+--------------------------------------------------------------------------------
+E. CART SIDEBAR VISIBILITY & RENDERING
+--------------------------------------------------------------------------------
+Line: `window.openCartSidebar = () => { ... }`
+  - What it does: Opens the shopping cart sidebar.
+  - Inside it:
+    * `document.getElementById('cartSidebar').classList.add('open');` 
+      -> Adds the CSS class 'open' to slide the panel into view.
+    * `document.getElementById('cartBackdrop').classList.add('visible');` 
+      -> Adds 'visible' to darken the page background.
+    * `document.body.style.overflow = 'hidden';` 
+      -> Blocks page scrolling behind the cart sidebar.
+    * `renderCartItems();` 
+      -> Re-renders the shopping cart item list.
+
+Line: `window.closeCartSidebar = () => { ... }`
+  - What it does: Closes the sidebar.
+  - Inside it:
+    * Removes the 'open' and 'visible' classes and restores `document.body.style.overflow = ''` 
+      so the user can scroll again.
+
+Line: `const renderCartItems = () => { ... }`
+  - What it does: Fills the cart sidebar with the items, quantity inputs, and prices.
+  - Inside it:
+    * `const container = document.getElementById('cartSidebarItems');` 
+      -> Find the container.
+    * `const cart = getCart();` 
+      -> Get the list of items in the cart.
+    * `if (cart.length === 0) { ... }` 
+      -> If empty, injects a message "Your bag is empty", resets prices to ₹0, 
+         hides the discount row, and stops.
+    * `let subtotal = 0; let html = '';` 
+      -> Prepares helper counters.
+    * `cart.forEach(item => { ... });` 
+      -> For each item, add up the price (`subtotal += item.price * item.qty`) and append 
+         HTML card blocks with the item image, name, price, quantity selectors, and remove button.
+    * `container.innerHTML = html;` 
+      -> Draw the cards inside the sidebar.
+    * Checks if the discount code `opticaura_promo` is set to `'AURA10'` in localStorage:
+      - If yes: calculates a 10% discount (`subtotal * 0.1`), displays the discount row, 
+        and updates the final payable price.
+      - If no: hides the discount row and sets final price equal to subtotal.
+
+Line: `window.changeQtyClick = (productId, delta) => { ... }`
+  - What it does: Modifies item quantity from the plus/minus buttons.
+  - Inside it:
+    * `const cart = getCart();`
+    * `const item = cart.find(item => item.id === productId);`
+    * `item.qty = Math.max(1, item.qty + delta);` 
+      -> Changes quantity and ensures it remains at least 1.
+    * `setCart(cart);` 
+      -> Save the cart.
+
+--------------------------------------------------------------------------------
+F. BADGES, STICKY SCROLL, AND NAVIGATION
+--------------------------------------------------------------------------------
+Line: `const updateHeaderBadges = () => { ... }`
+  - What it does: Updates the numeric counts shown on the cart and wishlist navbar buttons.
+  - Inside it:
+    * Calculates total cart item quantities and the length of the wishlist array.
+    * Finds all badge elements. If count > 0, set `display = 'inline-block'` and display 
+       the count; if count is 0, set `display = 'none'` to hide the badge.
+
+Line: `const setupNavigationEvents = () => { ... }`
+  - What it does: Adds interactive triggers to navigation elements.
+  - Inside it:
+    * Hamburger Click: Toggles the class 'active' and 'open' on mobile elements to 
+      expand/collapse the drawer.
+    * Sticky Header Scroll: Listens to the scroll event of the window. If the scroll offset 
+      `window.scrollY > 50`, it adds the class 'scrolled' to the header which makes it 
+      semi-transparent. Otherwise, removes the class.
+    * Search trigger: Grabs text from `#navSearchInput` when pressing Enter or clicking 
+      the search magnifying glass and routes the browser to `shop.html?search=text`.
+
+Line: `const highlightActiveNav = () => { ... }`
+  - What it does: Underlines the page tab the user is currently visiting.
+  - Inside it:
+    * Looks at `window.location.pathname`. Checks if it contains eyeglasses, sunglasses, 
+      contacts, special-power, or stores, and adds the class 'active' to the corresponding navbar element.
+
+Line: `window.showToast = (message) => { ... }`
+  - What it does: Displays a temporary sliding notification popup in the bottom left.
+  - Inside it:
+    * `const container = document.getElementById('toastContainer');` 
+      -> Grabs the notification box container.
+    * `const toast = document.createElement('div'); toast.className = 'toast';` 
+      -> Creates a new message box.
+    * `toast.innerHTML = message; container.appendChild(toast);` 
+      -> Sets the text and appends it to the container.
+    * `setTimeout(() => { toast.classList.add('show'); }, 10);` 
+      -> Triggers the fade-in animation by adding the 'show' class after 10ms.
+    * `setTimeout(() => { toast.classList.remove('show'); ... }, 3500);` 
+      -> After 3.5 seconds, trigger the fade-out animation.
+    * `setTimeout(() => { toast.remove(); }, 3900);` 
+      -> Wait another 400ms (so fade-out finishes) and delete the box from the webpage.
+
+
+================================================================================
+PART 3: LINE-BY-LINE EXPLANATION OF product.html JAVASCRIPT
+================================================================================
+This script powers the dynamic product details page. It reads the product ID 
+from the URL, loads product details from the database, renders thumbnails, 
+manages configurations, and generates related products.
+
+--------------------------------------------------------------------------------
+A. PAGE LOADING
+--------------------------------------------------------------------------------
+Line: `document.addEventListener('DOMContentLoaded', () => { ... });`
+  - Inside it:
+    * `setTimeout(loadProductDetail, 100);` 
+      -> Wait 100ms for database registration, then load the product page details.
+    * Registers a listener for custom event `wishlistChanged` to keep recommendation 
+      cards' heart buttons and the main heart button synchronized with user updates.
+
+Line: `const loadProductDetail = () => { ... }`
+  - What it does: The core details builder.
+  - Inside it:
+    * `const params = new URLSearchParams(window.location.search);` 
+      -> Reads query parameters from the browser address bar.
+    * `const id = params.get('id');` 
+      -> Extracts the product ID (e.g. `sg1` or `cont4`).
+    * `if (!id || typeof PRODUCTS === 'undefined' || !PRODUCTS[id]) { showNotFound(); return; }` 
+      -> If the ID is missing or not in our database, show the product not found layout.
+    * `activeProductId = id; activeProduct = PRODUCTS[id];` 
+      -> Cache the active product.
+    * Updates breadcrumb elements, page title tag, main product photo source, and category 
+      and price labels.
+    * Generates a random rating score (e.g., 4.7 stars) and a random review count 
+      (e.g., 34 reviews) to simulate premium user reviews.
+    * Invokes `renderThumbnails()`, `renderSpecsOptions()`, `renderChecklist()`, and 
+      `renderRelatedRecommendations()`.
+    * Runs `syncWishlistButton(window.isInWishlist(id))` to highlight the heart if the 
+      item is favorited.
+
+--------------------------------------------------------------------------------
+B. SPECS OPTIONS, GALLERY, AND ACTIONS
+--------------------------------------------------------------------------------
+Line: `const renderThumbnails = () => { ... }`
+  - What it does: Draws the gallery options below the main product photo.
+  - Inside it:
+    * Loops through three image links (main image and two category-specific fallbacks) and 
+      appends buttons to the bar. Binds `switchMainImage` to each button.
+
+Line: `window.switchMainImage = (src, btn) => { ... }`
+  - What it does: Replaces the main picture.
+  - Inside it:
+    * Changes the main product image `src` attribute. Clears the CSS class 'active' from 
+      other thumbnails and adds it to the clicked button.
+
+Line: `const renderSpecsOptions = () => { ... }`
+  - What it does: Renders custom option fields.
+  - Inside it:
+    * If category is 'eyeglasses' or 'sunglasses', it creates fit selections (Standard/Narrow/Wide) 
+      and lens options (Clear/Blue-Cut/Photochromic). If contacts, it creates prescription 
+      strength dropdowns.
+
+Line: `window.selectConfigOption = (pill) => { ... }`
+  - What it does: Selects frame size or lens index options.
+  - Inside it:
+    * Removes 'active' class from other options in the row and highlights the clicked choice.
+
+Line: `window.adjustQty = (delta) => { ... }`
+  - What it does: Increments or decrements details page quantity selector.
+  - Inside it:
+    * Modifies the value of `#detailQty` by delta and clamps it to a minimum of 1.
+
+Line: `window.handleAddToBag = () => { ... }`
+  - What it does: Adds the active product configuration to the cart.
+  - Inside it:
+    * Reads input box quantity value and calls `window.addToCart(activeProductId, qty)`.
+
+Line: `window.handleWishlistToggle = () => { ... }`
+  - What it does: Add/remove active product from wishlist.
+  - Inside it:
+    * Calls `window.toggleWishlist(activeProductId)`.
+
+--------------------------------------------------------------------------------
+C. RECOMMENDATIONS ENGINE
+--------------------------------------------------------------------------------
+Line: `const renderRelatedRecommendations = () => { ... }`
+  - What it does: Recommends 4 similar products in a grid.
+  - Inside it:
+    * Filters the global products database to find items in the same category, excluding 
+      the current product.
+    * Shuffles them randomly: `list.sort(() => 0.5 - Math.random())`.
+    * Takes the first 4 items: `list.slice(0, 4)`.
+    * Loops through them, building card layouts (with custom badges, wishlist controls, and 
+      links to `product.html?id=ID`), and renders them inside `#recommendationsGrid`.
+
+Line: `const showNotFound = () => { ... }`
+  - What it does: Displays "Product Not Found" fallback block if query ID is invalid.
+
+
+================================================================================
+PART 4: LINE-BY-LINE EXPLANATION OF shop.html JAVASCRIPT
+================================================================================
+This script powers the dynamic catalog dashboard filters, pricing ranges, and sorting.
+
+--------------------------------------------------------------------------------
+A. PAGE LIFECYCLE
+--------------------------------------------------------------------------------
+Line: `document.addEventListener('DOMContentLoaded', () => { ... });`
+  - Inside it:
+    * Waits 100ms, then loads URL query parameters via `initializeFiltersFromUrl()` and 
+      applies filters via `applyFilters()`.
+    * Listens for the custom event `wishlistChanged` to sync card hearts. If the "My Wishlist" 
+      tag filter is currently checked, updates catalog views immediately to remove un-favorited items.
+
+--------------------------------------------------------------------------------
+B. FILTER SYSTEM & LOGIC
+--------------------------------------------------------------------------------
+Line: `function initializeFiltersFromUrl() { ... }`
+  - What it does: Automatically checks filters on load based on URL query tags.
+  - Inside it:
+    * Uses `URLSearchParams` to extract query categories (eyeglasses, sunglasses, contacts) 
+      and check the matching sidebar checkboxes.
+    * Populates search term strings and checks wishlist checkboxes if specified.
+
+Line: `function applyFilters() { ... }`
+  - What it does: The core filter engine. It runs every time a checkbox is checked/unchecked 
+    or when sorting is changed.
+  - Inside it:
+    * Retrieves checked values from sidebar input fields (categories, subcategories, price options, 
+      wishlist checked, search terms, and sort dropdown value).
+    * Copies database values: `let list = Object.values(PRODUCTS);`
+    * Search Filter: Checks if the name, category, or description includes the search query. 
+      Displays search breadcrumbs if search is active.
+    * Category Filter: Filters the list to keep only items matching checked categories.
+    * Subcategory Filter: Filters the list to keep only items matching checked subcategories 
+      (men's style, women's style, daily lenses, monthly lenses, computer lenses, colored, etc.).
+    * Price Filter: Evaluates item price against checked price ranges (under ₹1,000, ₹1,000-2,000, 
+      ₹2,000-3,000, ₹3,000-4,000, over ₹4,000).
+    * Wishlist Filter: Keeps only products that are in the user's wishlist array.
+    * Sorting: Sorts the filtered array:
+      - 'low-to-high': price ascending.
+      - 'high-to-low': price descending.
+      - 'alphabetical': alphabetical comparison of name.
+      - Default: Recommended sorting.
+    * Updates counter output. If matching items list is empty, hides the gallery and displays 
+      the empty state block.
+    * Renders catalog product cards: Loops through the filtered, sorted list to generate 
+      cards with dynamic badges, wishlist heart state triggers, link paths, and checkout buttons.
+
+Line: `function resetAllFilters() { ... }`
+  - What it does: Resets the entire filter board.
+  - Inside it:
+    * Clears query parameters from address bar using HTML5 History API.
+    * Clears active search parameters.
+    * Unchecks all filter checkboxes in the sidebar.
+    * Re-runs `applyFilters()`.
+
+
+================================================================================
+PART 5: LINE-BY-LINE EXPLANATION OF special-power.html JAVASCRIPT
+================================================================================
+This script powers the glare visualizer simulator on the lens engineering page.
+
+--------------------------------------------------------------------------------
+A. COATING COMPARISON SLIDER
+--------------------------------------------------------------------------------
+Line: `function handleSliderChange(val) { ... }`
+  - What it does: Responds to dragging the visualizer range slider.
+  - Arguments: `val` (the value of the slider, from 0 to 100)
+  - Inside it:
+    * `const shield = document.getElementById('compareShield');` 
+      -> Selects the glassmorphic blue-cut overlay lens simulation shield element.
+    * `shield.style.width = \`\${100 - val}%\`;` 
+      -> Dynamically adjusts the width of the overlay layer. Dragging the slider shifts 
+         the division boundary, demonstrating standard clear glass on the left versus 
+         the blue-cut coating on the right.
+================================================================================

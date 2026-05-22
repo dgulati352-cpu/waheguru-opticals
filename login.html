@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Waheguru Aura Optix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gold: #d4a373;
+      --gold-light: #e8c097;
+      --gold-dark: #8c7a5b;
+      --dark: #0d0d0d;
+      --dark-2: #141414;
+      --dark-3: #1e1e1e;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(212,163,115,0.2);
+      --text: #f0ece0;
+      --text-muted: #888877;
+      --error: #e05555;
+      --success: #4caf7d;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background */
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: float 12s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #d4a373, #5c3d1e);
+      top: -150px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #5c3d1e, #d4a373);
+      bottom: -100px;
+      right: -80px;
+      animation-delay: -4s;
+    }
+
+    .orb-3 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #d4a37355, transparent);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: -8s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    .orb-1 { animation-name: float1; }
+    .orb-2 { animation-name: float2; }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(30px, 40px); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-25px, -35px); }
+    }
+
+    /* Grid lines overlay */
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(212,163,115,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212,163,115,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Card */
+    .login-wrapper {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: min(900px, 96vw);
+      min-height: 540px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px var(--glass-border),
+        0 40px 80px rgba(0,0,0,0.6),
+        0 0 60px rgba(212,163,115,0.05);
+      animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Left panel */
+    .panel-left {
+      flex: 1;
+      background: linear-gradient(145deg, #1a1204, #0d0905, #1a1204);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 50px;
+      overflow: hidden;
+    }
+
+    .panel-left::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='100' cy='100' r='60' fill='none' stroke='%23d4a373' stroke-width='0.5' opacity='0.08'/%3E%3Ccircle cx='100' cy='100' r='40' fill='none' stroke='%23d4a373' stroke-width='0.3' opacity='0.06'/%3E%3C/svg%3E") center / 180px repeat;
+      pointer-events: none;
+    }
+
+    .brand-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .panel-left h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(38px, 4vw, 52px);
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+
+    .panel-left h1 span {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .panel-left p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 280px;
+    }
+
+    .decorative-line {
+      width: 50px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 30px 0;
+    }
+
+    .amenities {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .amenity {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .amenity-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* Right panel */
+    .panel-right {
+      width: 420px;
+      background: var(--glass);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-left: 1px solid var(--glass-border);
+      padding: 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .form-subheading {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+
+    /* Form fields */
+    .field-group {
+      margin-bottom: 22px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+
+    .field-wrapper {
+      position: relative;
+    }
+
+    .field-wrapper input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 14px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .field-wrapper input::placeholder {
+      color: rgba(255,255,255,0.18);
+    }
+
+    .field-wrapper input:focus {
+      border-color: var(--gold);
+      background: rgba(212,163,115,0.06);
+      box-shadow: 0 0 0 3px rgba(212,163,115,0.1);
+    }
+
+    .field-wrapper input.error {
+      border-color: var(--error);
+      background: rgba(224,85,85,0.06);
+    }
+
+    .field-wrapper .toggle-pw {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 18px;
+      line-height: 1;
+      transition: color 0.2s;
+      padding: 0;
+    }
+
+    .field-wrapper .toggle-pw:hover { color: var(--gold); }
+
+    .error-msg {
+      font-size: 11px;
+      color: var(--error);
+      margin-top: 6px;
+      min-height: 16px;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .error-msg.visible { opacity: 1; }
+
+    /* Remember + forgot */
+    .form-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .remember-label input[type="checkbox"] {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .remember-label input[type="checkbox"]:checked {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .remember-label input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 10px;
+      color: #0d0d0d;
+      font-weight: bold;
+    }
+
+    .forgot-link {
+      font-size: 13px;
+      color: var(--gold);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .forgot-link:hover { color: var(--gold-light); }
+
+    /* Submit button */
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+      background-size: 200% 200%;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #0d0d0d;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-login::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .btn-login:hover {
+      box-shadow: 0 8px 30px rgba(212,163,115,0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-login:hover::before { opacity: 1; }
+
+    .btn-login:active { transform: translateY(0); }
+
+    .btn-login.loading {
+      pointer-events: none;
+      color: transparent;
+    }
+
+    .btn-login.loading::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(0,0,0,0.3);
+      border-top-color: #0d0d0d;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Success state */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      background: rgba(76,175,125,0.1);
+      border: 1px solid rgba(76,175,125,0.25);
+      border-radius: 10px;
+      color: var(--success);
+      font-size: 14px;
+      margin-top: 16px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 28px 0;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    .signup-prompt {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .signup-prompt a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .signup-prompt a:hover { color: var(--gold-light); }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .panel-left { display: none; }
+      .panel-right {
+        width: 100%;
+        padding: 48px 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="grid-overlay"></div>
+
+  <!-- Login card -->
+  <div class="login-wrapper" role="main">
+
+    <!-- Left decorative panel -->
+    <div class="panel-left">
+      <div class="brand-logo">Waheguru Aura Optix</div>
+      <h1>See The World<br>With <span>Clarity</span></h1>
+      <div class="decorative-line"></div>
+      <p>Sign in to manage your orders, access exclusive member benefits, and explore premium eyewear collections.</p>
+      <div class="amenities">
+        <div class="amenity"><span class="amenity-dot"></span> Track orders & prescriptions</div>
+        <div class="amenity"><span class="amenity-dot"></span> Exclusive member discounts & offers</div>
+        <div class="amenity"><span class="amenity-dot"></span> Book eye care appointments</div>
+      </div>
+    </div>
+
+    <!-- Right form panel -->
+    <div class="panel-right">
+      <h2 class="form-heading">Welcome back</h2>
+      <p class="form-subheading">Enter your credentials to continue</p>
+
+      <form id="loginForm" novalidate>
+
+        <!-- Email -->
+        <div class="field-group">
+          <label class="field-label" for="email">Email Address</label>
+          <div class="field-wrapper">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+          </div>
+          <span class="error-msg" id="emailError"></span>
+        </div>
+
+        <!-- Password -->
+        <div class="field-group">
+          <label class="field-label" for="password">Password</label>
+          <div class="field-wrapper">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+            />
+            <button type="button" class="toggle-pw" id="togglePw" aria-label="Toggle password visibility">👁</button>
+          </div>
+          <span class="error-msg" id="passwordError"></span>
+        </div>
+
+        <!-- Options -->
+        <div class="form-options">
+          <label class="remember-label">
+            <input type="checkbox" id="rememberMe" />
+            Remember me
+          </label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-login" id="loginBtn">Sign In</button>
+
+        <!-- Success -->
+        <div class="success-msg" id="successMsg">
+          ✓ &nbsp; Login successful! Redirecting you...
+        </div>
+
+      </form>
+
+      <div class="divider">or</div>
+      <p class="signup-prompt">Don't have an account? <a href="#">Create one</a></p>
+    </div>
+
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const loginBtn = document.getElementById('loginBtn');
+    const successMsg = document.getElementById('successMsg');
+    const togglePw = document.getElementById('togglePw');
+
+    // Toggle password visibility
+    togglePw.addEventListener('click', () => {
+      const isHidden = passwordInput.type === 'password';
+      passwordInput.type = isHidden ? 'text' : 'password';
+      togglePw.textContent = isHidden ? '🙈' : '👁';
+    });
+
+    // Clear errors on input
+    emailInput.addEventListener('input', () => clearError(emailInput, emailError));
+    passwordInput.addEventListener('input', () => clearError(passwordInput, passwordError));
+
+    function showError(input, errorEl, message) {
+      input.classList.add('error');
+      errorEl.textContent = message;
+      errorEl.classList.add('visible');
+    }
+
+    function clearError(input, errorEl) {
+      input.classList.remove('error');
+      errorEl.classList.remove('visible');
+    }
+
+    function validateEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let valid = true;
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      // Validate email
+      if (!email) {
+        showError(emailInput, emailError, 'Please enter your email address.');
+        valid = false;
+      } else if (!validateEmail(email)) {
+        showError(emailInput, emailError, 'Please enter a valid email address.');
+        valid = false;
+      } else {
+        clearError(emailInput, emailError);
+      }
+
+      // Validate password
+      if (!password) {
+        showError(passwordInput, passwordError, 'Please enter your password.');
+        valid = false;
+      } else if (password.length < 6) {
+        showError(passwordInput, passwordError, 'Password must be at least 6 characters.');
+        valid = false;
+      } else {
+        clearError(passwordInput, passwordError);
+      }
+
+      if (!valid) return;
+
+      // Simulate login
+      loginBtn.classList.add('loading');
+      loginBtn.textContent = '';
+
+      await new Promise(resolve => setTimeout(resolve, 1800));
+
+      loginBtn.classList.remove('loading');
+      loginBtn.textContent = 'Sign In';
+      successMsg.style.display = 'block';
+
+      // Set logged in state and redirect
+      localStorage.setItem('opticaura_logged_in', 'true');
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1000);
+    });
+  </script>
+
+</body>
+</html>

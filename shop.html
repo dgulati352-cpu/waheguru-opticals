@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <script>
+    if (!localStorage.getItem('opticaura_logged_in')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discover Eyewear | Waheguru Aura Optix</title>
+
+  <!-- Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style1.css">
+
+  <!-- Dynamic Scripts -->
+  <script src="js/products-db.js" defer></script>
+  <script src="js/shared.js" defer></script>
+
+  <style>
+    /* Catalog Layout */
+    .catalog-wrapper {
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 0 5%;
+      display: flex;
+      gap: 40px;
+    }
+
+    /* Sidebar Filter Column */
+    .filter-sidebar {
+      flex: 0 0 280px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      border: 1px solid #f1ece1;
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.01);
+      transition: all 0.3s ease;
+    }
+
+    .filter-section {
+      margin-bottom: 25px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid #f8f6f0;
+    }
+
+    .filter-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .filter-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .filter-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      color: #444;
+      user-select: none;
+    }
+
+    .filter-checkbox input {
+      width: 17px;
+      height: 17px;
+      border: 1px solid #8c7a5b;
+      border-radius: 4px;
+      accent-color: #d4a373;
+      cursor: pointer;
+    }
+
+    /* Main Product List Column */
+    .catalog-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    /* Utility Bar */
+    .catalog-toolbar {
+      background: #fff;
+      padding: 15px 25px;
+      border-radius: 12px;
+      border: 1px solid #f1ece1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .results-indicator h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #111;
+    }
+
+    .results-indicator span {
+      color: #d4a373;
+      font-weight: 700;
+    }
+
+    .sort-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .sort-select {
+      padding: 8px 15px;
+      border: 1px solid #e0dbce;
+      border-radius: 6px;
+      background-color: #fff;
+      font-family: inherit;
+      color: #111;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .sort-select:focus {
+      border-color: #d4a373;
+    }
+
+    /* Catalog Grid */
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 30px;
+    }
+
+    /* Dynamic Product Cards (Aligned with index.html) */
+    .p-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.02);
+      border: 1px solid #f1ece1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .p-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(140, 122, 91, 0.12);
+      border-color: #d4a373;
+    }
+
+    .p-card-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #d4a373;
+      color: #111;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 30px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .p-card-wishlist {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      font-size: 1.1rem;
+      color: #8c7a5b;
+      z-index: 2;
+    }
+
+    .p-card-wishlist:hover {
+      transform: scale(1.1);
+      color: #c94a4a;
+      background: #fff;
+    }
+
+    .p-card-wishlist.active {
+      color: #c94a4a !important;
+    }
+
+    .p-card-img-wrap {
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .p-card-img-wrap img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      transition: transform 0.4s ease;
+    }
+
+    .p-card:hover .p-card-img-wrap img {
+      transform: scale(1.05);
+    }
+
+    .p-card-cat {
+      font-size: 0.72rem;
+      color: #8c7a5b;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .p-card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 8px;
+      line-height: 1.4;
+      height: 2.8rem;
+      display: -webkit-box;
+    }
+
+    .p-card-title a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .p-card-title a:hover {
+      color: #d4a373;
+    }
+
+    .p-card-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #f8f6f0;
+    }
+
+    .p-card-price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .p-card-btn {
+      padding: 10px 18px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .p-card-btn:hover {
+      background: #d4a373;
+      color: #111;
+    }
+
+    /* Empty State */
+    .empty-state {
+      background: #fff;
+      border: 1px dashed #e0dbce;
+      border-radius: 16px;
+      padding: 60px 40px;
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      color: #8c7a5b;
+      margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: #111;
+    }
+
+    .empty-state p {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .reset-btn {
+      padding: 10px 24px;
+      background: #d4a373;
+      color: #111;
+      border: none;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .reset-btn:hover {
+      background: #c59262;
+      color: #fff;
+    }
+
+    .clear-filters-link {
+      font-size: 0.85rem;
+      color: #8c7a5b;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: 15px;
+      display: inline-block;
+    }
+
+    .clear-filters-link:hover {
+      color: #d4a373;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 991px) {
+      .catalog-wrapper {
+        flex-direction: column;
+      }
+
+      .filter-sidebar {
+        flex: 1;
+        position: static;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- MAIN CATALOG INTERFACE -->
+  <div class="catalog-wrapper">
+
+    <!-- Sidebar Filters -->
+    <aside class="filter-sidebar">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
+        <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.6rem; font-weight:600; color:#111;">Refine
+          Filters</h3>
+        <span onclick="resetAllFilters()"
+          style="font-size:0.8rem; text-decoration:underline; color:#8c7a5b; cursor:pointer; font-weight:600;">Reset</span>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="filter-section">
+        <h4 class="filter-title">Category</h4>
+        <div class="filter-group">
+          <label class="filter-checkbox">
+            <input type="checkbox" id="cat-eyeglasses" name="category" value="eyeglasses" onchange="applyFilters()">
+            <span>Eyeglasses</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="cat-sunglasses" name="category" value="sunglasses" onchange="applyFilters()">
+            <span>Sunglasses</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="cat-contacts" name="category" value="contacts" onchange="applyFilters()">
+            <span>Contact Lenses</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Subcategory / Segment Filter -->
+      <div class="filter-section">
+        <h4 class="filter-title">Style & Demographic</h4>
+        <div class="filter-group">
+          <label class="filter-checkbox">
+            <input type="checkbox" id="sub-men" name="subcategory" value="men" onchange="applyFilters()">
+            <span>Men's Style</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="sub-women" name="subcategory" value="women" onchange="applyFilters()">
+            <span>Women's Style</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="sub-kids" name="subcategory" value="kids" onchange="applyFilters()">
+            <span>Kids' Range</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="sub-computer" name="subcategory" value="computer" onchange="applyFilters()">
+            <span>Blue Cut / Computer</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="sub-sports" name="subcategory" value="sports" onchange="applyFilters()">
+            <span>Sports Lenses</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="sub-daily" name="subcategory" value="daily" onchange="applyFilters()">
+            <span>Daily Disposable Lenses</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="sub-monthly" name="subcategory" value="monthly" onchange="applyFilters()">
+            <span>Monthly Disposable Lenses</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="sub-colored" name="subcategory" value="colored" onchange="applyFilters()">
+            <span>Colored Correctives</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Price Range Filters -->
+      <div class="filter-section">
+        <h4 class="filter-title">Price Range</h4>
+        <div class="filter-group">
+          <label class="filter-checkbox">
+            <input type="checkbox" name="price" value="under-1000" onchange="applyFilters()">
+            <span>Under ₹1,000</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" name="price" value="1000-2000" onchange="applyFilters()">
+            <span>₹1,000 - ₹2,000</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" name="price" value="2000-3000" onchange="applyFilters()">
+            <span>₹2,000 - ₹3,000</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" name="price" value="3000-4000" onchange="applyFilters()">
+            <span>₹3,000 - ₹4,000</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" name="price" value="over-4000" onchange="applyFilters()">
+            <span>Over ₹4,000</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Custom Options -->
+      <div class="filter-section">
+        <h4 class="filter-title">Special Tags</h4>
+        <div class="filter-group">
+          <label class="filter-checkbox">
+            <input type="checkbox" id="tag-wishlist" name="tag" value="wishlist" onchange="applyFilters()">
+            <span>My Wishlist ❤️</span>
+          </label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Catalog View -->
+    <main class="catalog-content">
+
+      <!-- Toolbar -->
+      <div class="catalog-toolbar">
+        <div class="results-indicator">
+          <h2>Showing <span id="resultsCount">0</span> premium items</h2>
+          <div id="searchBreadcrumb" style="font-size:0.82rem; color:#8c7a5b; margin-top:4px; font-weight:500;"></div>
+        </div>
+
+        <div class="sort-control">
+          <span>Sort By:</span>
+          <select class="sort-select" id="sortBySelector" onchange="applyFilters()">
+            <option value="recommended">Best Sellers First</option>
+            <option value="low-to-high">Price: Low to High</option>
+            <option value="high-to-low">Price: High to Low</option>
+            <option value="alphabetical">Product: A to Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Active Cards Grid -->
+      <div class="catalog-grid" id="catalogGrid">
+        <!-- Rendered Dynamically via JS -->
+      </div>
+
+      <!-- Empty State Banner -->
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-state-icon">🔍</div>
+        <h3>No Matching Frames Found</h3>
+        <p>We couldn't find any products matching your active filters. Try clearing some selections or search terms.</p>
+        <button class="reset-btn" onclick="resetAllFilters()">Clear All Filters</button>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- SIMPLE VERSION - SHOW ALL PRODUCTS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAllProducts();
+    });
+
+    function renderAllProducts() {
+      if (typeof PRODUCTS === 'undefined') {
+        console.error("PRODUCTS data not found!");
+        return;
+      }
+
+      const grid = document.getElementById('catalogGrid');
+      if (!grid) return;
+
+      let html = '';
+
+      // Loop through all products
+      Object.values(PRODUCTS).forEach(product => {
+        html += `
+                <div class="p-card">
+                    <div class="p-card-wishlist" data-id="${product.id}" onclick="event.stopPropagation(); toggleWishlist('${product.id}')">
+                        ♡
+                    </div>
+                    
+                    <div class="p-card-img-wrap" onclick="location.href='product.html?id=${product.id}'" style="cursor: pointer;">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    
+                    <div class="p-card-info">
+                        <div class="p-card-cat">${product.category}</div>
+                        <h3 class="p-card-title">
+                            <a href="product.html?id=${product.id}">${product.name}</a>
+                        </h3>
+                        <div class="p-card-price">₹${product.price.toLocaleString()}</div>
+                    </div>
+                    
+                    <button class="p-card-btn" onclick="window.addToCart('${product.id}')">
+                        ADD TO BAG
+                    </button>
+                </div>
+            `;
+      });
+
+      grid.innerHTML = html;
+    }
+  </script>
+</body>
+
+</html>

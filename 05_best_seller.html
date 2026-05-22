@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    if (!localStorage.getItem('opticaura_logged_in')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+<meta charset="UTF-8">
+<title>Best Sellers | Waheguru Aura Optix</title>
+<link rel="stylesheet" href="05_style.css">
+
+</head>
+
+<body>
+
+    
+            <!-- ===================== TOP BAR ===================== -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <a href="01_about_us.html">About us</a>
+            <a href="02_contact_us.html">Contact Us</a>
+            <a href="03_eye_care.html">Eye Care</a>
+            <a href="04_new_arrival.html">New Arrivals</a>
+            <a href="05_best_seller.html">Best Sellers</a>
+            <a href="06_offline_store.html">Offline Stores</a>
+            <a href="07_book_app.html">Book Appointment</a>
+            <a href="08_privacy_policy.html">Privacy Policy</a>
+            <a href="09_help.html">Help</a>
+            <a href="#" onclick="localStorage.removeItem('opticaura_logged_in'); window.location.reload();" style="color: #ff6b6b !important; font-weight: 600;">Logout</a>
+        </div>
+    </div>
+
+
+    <!-- ===================== NAVBAR ===================== -->
+    <header class="main-header">
+        <div class="main-header-container">
+            <a href="index.html" class="logo">
+                <img src="img0.jpeg" alt="Logo">
+                WAHEGURU AURA OPTIX
+            </a>
+            <nav class="main-nav">
+                <div class="dropdown">
+                    <a href="shop.html?category=eyeglasses">EYEGLASSES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=eyeglasses&sub=men">Men's Eyeglasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=women">Women's Eyeglasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=computer">Computer Glasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=kids">Kids' Eyeglasses</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="shop.html?category=sunglasses">SUNGLASSES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=sunglasses&sub=men">Men's Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=women">Women's Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=icon">Power Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=sports">Sports Sunglasses</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="shop.html?category=contacts">CONTACTS</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=contacts&sub=daily">Daily Disposable</a></li>
+                        <li><a href="shop.html?category=contacts&sub=monthly">Monthly Disposable</a></li>
+                        <li><a href="shop.html?category=contacts&sub=colored">Colored Contact Lenses</a></li>
+                        <li><a href="shop.html?category=contacts&sub=lens">Contact Lens Solution & Care</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="special-power.html">SPECIAL POWER</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="special-power.html">High Power Lenses</a></li>
+                        <li><a href="special-power.html">Cylinder Power Lenses</a></li>
+                        <li><a href="special-power.html">Photochromic Lenses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=computer">Blue Cut + UV Protection</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="06_offline_store.html">STORES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="06_offline_store.html">Find a Store Near You</a></li>
+                        <li><a href="06_offline_store.html">Official Stores</a></li>
+                        <li><a href="07_book_app.html">Book Eye Test Appointment</a></li>
+                        <li><a href="07_book_app.html">Home Eye Check-up</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="header-icons">
+                <a href="shop.html" class="cart-icon">🛒</a>
+            </div>
+        </div>
+    </header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Best Sellers</h1>
+        <p>Our Most Loved Eyewear Collection</p>
+        <button class="btn">Shop Now</button>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Top Selling Frames</h2>
+
+    <div class="products">
+
+        <div class="card">
+            <span class="badge">Best Seller</span>
+            <img src="img21.jpg" alt="Classic Black Frame">
+            <div class="card-content">
+                <h3>Classic Black Frame</h3>
+                <p>₹999</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="badge">Trending</span>
+            <img src="img22.jpg" alt="Golden Aviator">
+            <div class="card-content">
+                <h3>Golden Aviator</h3>
+                <p>₹1299</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="img23.jpg" alt="Round Retro">
+            <div class="card-content">
+                <h3>Round Retro</h3>
+                <p>₹899</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="img24.jpg" alt="Cat Eye Frame">
+            <div class="card-content">
+                <h3>Cat Eye Frame</h3>
+                <p>₹1099</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="img25.jpg" alt="Kids Blue Frame">
+            <div class="card-content">
+                <h3>Kids Blue Frame</h3>
+                <p>₹699</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="img26.jpg" alt="Premium Silver">
+            <div class="card-content">
+                <h3>Premium Silver</h3>
+                <p>₹1999</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="img27.jpg" alt="Stylish Brown">
+            <div class="card-content">
+                <h3>Stylish Brown</h3>
+                <p>₹1199</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="img28.jpg" alt="Transparent Frame">
+            <div class="card-content">
+                <h3>Transparent Frame</h3>
+                <p>₹1399</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="img29.jpg" alt="Sport Sunglasses">
+            <div class="card-content">
+                <h3>Sport Sunglasses</h3>
+                <p>₹1599</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="img30.jpg" alt="Luxury Frame">
+            <div class="card-content">
+                <h3>Luxury Frame</h3>
+                <p>₹2499</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="featured">
+    <h2>Featured Premium Frames</h2>
+
+    <div class="featured-cards">
+
+        <div class="featured-card">
+            <img src="img31.jpg" alt="Luxury Gold Frame">
+            <div class="card-content">
+                <h3>Luxury Gold Frame</h3>
+                <p>₹2999</p>
+            </div>
+        </div>
+
+        <div class="featured-card">
+            <img src="img32.jpg" alt="Designer Black">
+            <div class="card-content">
+                <h3>Designer Black</h3>
+                <p>₹2799</p>
+            </div>
+        </div>
+
+        <div class="featured-card">
+            <img src="img33.jpg" alt="Elegant Rimless">
+            <div class="card-content">
+                <h3>Elegant Rimless</h3>
+                <p>₹3199</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+<script>
+  
+    const cards = document.querySelectorAll('.card');
+    
+    cards.forEach(card => {
+        const viewingText = document.createElement('div');
+        viewingText.style = "font-size: 11px; color: #8c7a5b; margin-top: 5px; font-style: italic;";
+        
+        const randomViewers = Math.floor(Math.random() * 20) + 5;
+        viewingText.innerHTML = `🔥 ${randomViewers} people viewed this today`;
+        
+        card.querySelector('.card-content').appendChild(viewingText);
+    });
+
+ 
+    document.querySelector('.hero .btn').addEventListener('click', () => {
+        document.querySelector('.section').scrollIntoView({ behavior: 'smooth' });
+    });
+
+ 
+
+</script>
+
+<footer>
+    <p>📍 Waheguru Aura Optix | 📞 +91 9876543210 | ✉ support@waheguruauraoptix.com</p>
+    <p>© 2026 WAHEGURU AURA OPTIX. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

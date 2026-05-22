@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    if (!localStorage.getItem('opticaura_logged_in')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Waheguru Aura Optix</title>
+    <link rel="stylesheet" href="01_style.css">
+   
+</head>
+
+<body>
+
+    
+            <!-- ===================== TOP BAR ===================== -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <a href="01_about_us.html">About us</a>
+            <a href="02_contact_us.html">Contact Us</a>
+            <a href="03_eye_care.html">Eye Care</a>
+            <a href="04_new_arrival.html">New Arrivals</a>
+            <a href="05_best_seller.html">Best Sellers</a>
+            <a href="06_offline_store.html">Offline Stores</a>
+            <a href="07_book_app.html">Book Appointment</a>
+            <a href="08_privacy_policy.html">Privacy Policy</a>
+            <a href="09_help.html">Help</a>
+            <a href="#" onclick="localStorage.removeItem('opticaura_logged_in'); window.location.reload();" style="color: #ff6b6b !important; font-weight: 600;">Logout</a>
+        </div>
+    </div>
+
+
+    <!-- ===================== NAVBAR ===================== -->
+    <header class="main-header">
+        <div class="main-header-container">
+            <a href="index.html" class="logo">
+                <img src="img0.jpeg" alt="Logo">
+                WAHEGURU AURA OPTIX
+            </a>
+            <nav class="main-nav">
+                <div class="dropdown">
+                    <a href="shop.html?category=eyeglasses">EYEGLASSES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=eyeglasses&sub=men">Men's Eyeglasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=women">Women's Eyeglasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=computer">Computer Glasses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=kids">Kids' Eyeglasses</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="shop.html?category=sunglasses">SUNGLASSES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=sunglasses&sub=men">Men's Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=women">Women's Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=icon">Power Sunglasses</a></li>
+                        <li><a href="shop.html?category=sunglasses&sub=sports">Sports Sunglasses</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="shop.html?category=contacts">CONTACTS</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="shop.html?category=contacts&sub=daily">Daily Disposable</a></li>
+                        <li><a href="shop.html?category=contacts&sub=monthly">Monthly Disposable</a></li>
+                        <li><a href="shop.html?category=contacts&sub=colored">Colored Contact Lenses</a></li>
+                        <li><a href="shop.html?category=contacts&sub=lens">Contact Lens Solution & Care</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="special-power.html">SPECIAL POWER</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="special-power.html">High Power Lenses</a></li>
+                        <li><a href="special-power.html">Cylinder Power Lenses</a></li>
+                        <li><a href="special-power.html">Photochromic Lenses</a></li>
+                        <li><a href="shop.html?category=eyeglasses&sub=computer">Blue Cut + UV Protection</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="06_offline_store.html">STORES</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="06_offline_store.html">Find a Store Near You</a></li>
+                        <li><a href="06_offline_store.html">Official Stores</a></li>
+                        <li><a href="07_book_app.html">Book Eye Test Appointment</a></li>
+                        <li><a href="07_book_app.html">Home Eye Check-up</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="header-icons">
+                <a href="shop.html" class="cart-icon">🛒</a>
+            </div>
+        </div>
+    </header>
+
+    <header class="hero">
+        <div class="container">
+            <h1>Seeing The World Clearly</h1>
+            <p>Where tradition meets the highest standards of optical care.</p>
+        </div>
+    </header>
+
+    <section class="container">
+        <div class="story-flex">
+            <div class="story-text">
+                <h1>Our Story</h1>
+                <div class="accent-line" style="margin-left:0;"></div>
+                <p>What started as a small local clinic has evolved into a sanctuary for eyewear enthusiasts. We believe
+                    that glasses are more than just lenses—they are a cultural statement. </p>
+                <p>Inspired by the rhythmic patterns of Warli Art, our flagship collections celebrate the geometry of
+                    ancient Indian tribal life. Every frame tells a story of community, nature, and the human spirit,
+                    designed for the modern individual who values depth over trends.</p>
+            </div>
+            <div class="story-img">
+                <img src="img2.png" alt="Warli Heritage Collection">
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us">
+        <div class="container">
+            <div class="text-center">
+                <h1>Why Choose Us</h1>
+                <div class="accent-line"></div>
+                <p>We combine artisanal craftsmanship with clinical precision.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>Precision Diagnostics</h3>
+                    <p>Our store features the latest AI-driven eye mapping technology to ensure your prescription is
+                        accurate to the decimal.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Exclusive Curations</h3>
+                    <p>From the "Happster Warli Collection" to global luxury brands, we offer frames you won't find
+                        anywhere else.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Lifetime Adjustments</h3>
+                    <p>Buy once, stay comfortable forever. We provide free frame adjustments and ultrasonic cleaning for
+                        the life of your eyewear.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>UV400 Standards</h3>
+                    <p>Every lens we dispense includes premium UV protection and anti-fatigue coatings as a standard,
+                        not an upgrade.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Eco-Conscious Craftsmanship</h3>
+                    <p>Our signature collections utilize bio-acetate and sustainably sourced materials, allowing you to
+                        wear high-fashion eyewear ..</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Precision Digital Fitting</h3>
+                    <p>We utilize advanced 3D facial mapping technology to ensure your frames sit perfectly on your nose
+                        bridge and ears, fittings.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="vision text-center">
+        <div class="container">
+            <h2>Charting Our Vision</h2>
+            <div class="accent-line"></div>
+            <h2>
+                "To democratize luxury eyewear by infusing it with the soul of Indian art, ensuring every pair of eyes
+                sees the world with clarity and pride."
+            </h2>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="text-center">
+            <h1>The Optical Studio</h1>
+            <div class="accent-line"></div>
+            <p>Experience a space designed for comfort and style.</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="img3.jpg" alt="Store Front"></div>
+            <div class="gallery-item"><img src="img4.jpg" alt="Lens Lab"></div>
+            <div class="gallery-item"><img src="img5.jpg" alt="Consultation Area"></div>
+        </div>
+    </section>
+
+    <section class="why-us">
+        <div class="container text-center">
+            <h2>In-Store Experience</h2>
+            <div class="accent-line"></div>
+            <p>Take a look inside our boutique shopping experience.</p>
+            <div class="video-wrapper">
+                <iframe
+                    src="https://www.youtube.com/embed/tH-JxECXPpg?autoplay=1&mute=1&loop=1&playlist=tH-JxECXPpg&controls=0&rel=0"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta text-center">
+        <div class="container">
+            <h2>Find Your Perfect Pair</h2>
+            <p>Visit us today for a free eye checkup and style consultation.</p>
+            <a href="#" class="btn">Visit Our Store</a>
+        </div>
+    </section>
+    <script>
+        
+ 
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. Scroll-to-Top Button Functionality
+            const scrollBtn = document.createElement('button');
+            scrollBtn.innerHTML = '↑';
+            scrollBtn.style.cssText = 'position:fixed; bottom:20px; right:20px; padding:10px 15px; display:none; z-index:999; cursor:pointer; background:#371d03; border:none; color:white; border-radius:5px;';
+            document.body.appendChild(scrollBtn);
+
+            window.addEventListener('scroll', () => {
+                scrollBtn.style.display = (window.scrollY > 300) ? 'block' : 'none';
+            });
+
+            scrollBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+
+
+
+
+            // 3. Styled Modal for "Visit Our Store" (CTA)
+            const modal = document.createElement('div');
+            modal.style.cssText = 'display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center; backdrop-filter: blur(3px);';
+
+            modal.innerHTML = `
+    <div style="background:#ffffff; padding:40px; border-radius:12px; color:#333; max-width:400px; text-align:center; border-bottom: 8px solid #d4a373; box-shadow: 0 15px 35px rgba(0,0,0,0.2);">
+        <h2 style="color:#1a1a1a; margin-top:0;">Visit Our Studio</h2>
+        <p style="line-height:1.6; color:#555;">Experience the Waheguru Aura Optix difference. Visit our flagship store for a personalized consultation.</p>
+        <p style="font-weight:bold; color:#d4a373; margin:20px 0;">Open Daily: 10:00 AM - 8:00 PM</p>
+        <button id="close-modal" style="padding:12px 30px; background:#1a1a1a; color:#fff; border:none; cursor:pointer; font-weight:bold; text-transform:uppercase; transition:0.3s;">Close</button>
+    </div>
+`;
+            document.body.appendChild(modal);
+
+            // Add hover effect to the close button via JS
+            const closeBtn = modal.querySelector('#close-modal');
+            closeBtn.addEventListener('mouseover', () => closeBtn.style.backgroundColor = '#d4a373');
+            closeBtn.addEventListener('mouseout', () => closeBtn.style.backgroundColor = '#1a1a1a');
+
+            const ctaBtn = document.querySelector('.btn');
+            ctaBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.style.display = 'flex';
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+
+
+            
+        });
+    </script>
+
+</body>
+
+</html>
